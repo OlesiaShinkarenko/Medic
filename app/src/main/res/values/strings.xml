@@ -15,4 +15,6 @@
     <string name="continue_text">Далее</string>
     <string name="continue_with_Yandex">Войти с Яндекс</string>
     <string name="continue_with">Или войдите с помощью</string>
+    <string name="code_verification">Введите код из E-mail</string>
+    <string name="code_again">Отправить код повторно можно\nбудет через %1$d секунд</string>
 </resources>
