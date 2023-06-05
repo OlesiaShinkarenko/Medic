@@ -10,4 +10,5 @@
     <color name="skip_color">#57A9FF</color>
     <color name="nameOnBoard_color">#00B712</color>
     <color name="AfternameOnBoard_color">#939396</color>
+    <color name="skip_color2">#1A6FEE</color>
 </resources>
