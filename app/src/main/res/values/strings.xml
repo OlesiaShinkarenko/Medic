@@ -29,4 +29,12 @@
     <string name="eight">8</string>
     <string name="nine">9</string>
     <string name="zero">0</string>
+    <string name="create_card_str">Создание карты\nпациента</string>
+    <string name="without_card_text">Без карты пациента вы не сможете заказать анализы.</string>
+    <string name="result_analysis_text">В картах пациентов будут храниться результаты\nанализов вас и ваших близких.</string>
+    <string name="name">Имя</string>
+    <string name="lastname">Отчество</string>
+    <string name="surname">Фамилия</string>
+    <string name="date_birthday">Дата рождения</string>
+    <string name="gender">Пол</string>
 </resources>
