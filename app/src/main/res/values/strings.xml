@@ -3,4 +3,10 @@
     <string name="skip">Пропустить</string>
     <string name="analysis">Анализы</string>
     <string name="sample_collection">Экспресс сбор и получение проб</string>
+    <string name="notifications">Уведомления</string>
+    <string name="quickly_result">Вы быстро узнаете о результатах</string>
+    <string name="complete">Завершить</string>
+    <string name="monitoring">Мониторинг</string>
+    <string name="our_doctors">Наши врачи всегда наблюдают <b /> за вашими показателями здоровья</string>
+    <string name="hello">Добро пожаловать!</string>
 </resources>
