@@ -7,6 +7,12 @@
     <string name="quickly_result">Вы быстро узнаете о результатах</string>
     <string name="complete">Завершить</string>
     <string name="monitoring">Мониторинг</string>
-    <string name="our_doctors">Наши врачи всегда наблюдают <b /> за вашими показателями здоровья</string>
+    <string name="our_doctors">Наши врачи всегда наблюдают \nза вашими показателями здоровья</string>
     <string name="hello">Добро пожаловать!</string>
+    <string name="autorization">Войдите, чтобы пользоваться функциями\nприложения</string>
+    <string name="email">Вход по E-mail</string>
+    <string name="email_hint">example@mail.ru</string>
+    <string name="continue_text">Далее</string>
+    <string name="continue_with_Yandex">Войти с Яндекс</string>
+    <string name="continue_with">Или войдите с помощью</string>
 </resources>
