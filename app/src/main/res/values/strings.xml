@@ -38,4 +38,14 @@
     <string name="date_birthday">Дата рождения</string>
     <string name="gender">Пол</string>
     <string name="create">Создать</string>
+
+    //bottom navigation menu
+    <string name="results">Результаты</string>
+    <string name="support">Поддержка</string>
+    <string name="profile">Профиль</string>
+
+    //main screen
+    <string name="search_analysis">Искать анализы</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

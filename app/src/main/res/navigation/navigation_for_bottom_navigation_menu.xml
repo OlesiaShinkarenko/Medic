@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_for_bottom_navigation_menu"
+    app:startDestination="@id/analysisFragment">
+    <fragment
+        android:id="@+id/analysisFragment"
+        android:name="com.example.medic.AnalysisFragment"
+        android:label="fragment_analysis"
+        tools:layout="@layout/fragment_analysis" />
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.example.medic.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" />
+    <fragment
+        android:id="@+id/supportFragment"
+        android:name="com.example.medic.SupportFragment"
+        android:label="fragment_support"
+        tools:layout="@layout/fragment_support" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.medic.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <activity
+        android:id="@+id/mainScreen"
+        android:name="com.example.medic.MainScreen"
+        android:label="activity_main_screen"
+        tools:layout="@layout/activity_main_screen" />
+</navigation>
