@@ -39,13 +39,19 @@
     <string name="gender">Пол</string>
     <string name="create">Создать</string>
 
-    //bottom navigation menu
+    <!-- bottom navigation menu-->
     <string name="results">Результаты</string>
     <string name="support">Поддержка</string>
     <string name="profile">Профиль</string>
 
-    //main screen
+    <!--main screen-->
     <string name="search_analysis">Искать анализы</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--analysis -->
+    <string name="name_analysis">ПЦР-тест на определение РНК коронавируса стандартный</string>
+    <string name="time_analysis">2 дня</string>
+    <string name="cost_analysis">1800 ₽</string>
+    <string name="add_analysis">Добавить</string>
 </resources>
