@@ -54,4 +54,10 @@
     <string name="time_analysis">2 дня</string>
     <string name="cost_analysis">1800 ₽</string>
     <string name="add_analysis">Добавить</string>
+    <string name="discount_and_news">Акции и новости</string>
+
+    <!--banners -->
+    <string name="name_banners">Чек-ап для\nмужчин</string>
+    <string name="subscription_banners">9 исследований</string>
+    <string name="cost_banners">8000 ₽</string>
 </resources>

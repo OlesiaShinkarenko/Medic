@@ -12,4 +12,5 @@
     <color name="AfternameOnBoard_color">#939396</color>
     <color name="button_false_enabled">#C9D4FB</color>
     <color name="button_true_enabled">#1A6FEE</color>
+    <color name="banners_color">#76B3FF</color>
 </resources>
