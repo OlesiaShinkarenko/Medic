@@ -55,6 +55,7 @@
     <string name="cost_analysis">1800 ₽</string>
     <string name="add_analysis">Добавить</string>
     <string name="discount_and_news">Акции и новости</string>
+    <string name="catalog_analysis">Каталог анализов</string>
 
     <!--banners -->
     <string name="name_banners">Чек-ап для\nмужчин</string>
