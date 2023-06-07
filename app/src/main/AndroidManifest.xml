@@ -30,7 +30,7 @@
             android:name=".SlpashScreen"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".OnBoardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

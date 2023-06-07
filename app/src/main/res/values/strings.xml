@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Medic</string>
+    <!-- Onboard -->
     <string name="skip">Пропустить</string>
     <string name="analysis">Анализы</string>
     <string name="sample_collection">Экспресс сбор и получение проб</string>
@@ -8,6 +9,7 @@
     <string name="complete">Завершить</string>
     <string name="monitoring">Мониторинг</string>
     <string name="our_doctors">Наши врачи всегда наблюдают \nза вашими показателями здоровья</string>
+
     <string name="hello">Добро пожаловать!</string>
     <string name="autorization">Войдите, чтобы пользоваться функциями\nприложения</string>
     <string name="email">Вход по E-mail</string>
