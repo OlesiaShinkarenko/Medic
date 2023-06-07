@@ -24,10 +24,10 @@
             android:name=".VerificationActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".Registration.RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen"
+            android:name=".SplashScreen.SplashScreen"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnBoardActivity"
+            android:name=".Onboard.OnBoardActivity"
             android:exported="false">
 
         </activity>

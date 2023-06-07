@@ -1,4 +1,4 @@
-package com.example.medic;
+package com.example.medic.Onboard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -6,19 +6,20 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.medic.R;
+import com.example.medic.Registration.RegistrationActivity;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class OnBoardActivity extends AppCompatActivity {
 
 
-    private  OnBoardingAdapter onBoardingAdapter;
+    private OnBoardingAdapter onBoardingAdapter;
     private LinearLayout current_page;
     private ViewPager2 onboardViewPager;
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
@@ -52,7 +53,7 @@ public class OnBoardActivity extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                i = new Intent(OnBoardActivity.this,RegistrationActivity.class);
+                i = new Intent(OnBoardActivity.this, RegistrationActivity.class);
                 startActivity(i);
                 finish();
             }
