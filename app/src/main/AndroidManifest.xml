@@ -21,7 +21,7 @@
             android:name=".CreatePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".VerificationActivity"
+            android:name=".Verification.VerificationActivity"
             android:exported="false" />
         <activity
             android:name=".Registration.RegistrationActivity"

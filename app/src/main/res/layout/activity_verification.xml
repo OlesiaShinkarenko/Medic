@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VerificationActivity">
+    tools:context=".Verification.VerificationActivity">
     <ImageButton
         android:background="@drawable/button_arrow_style"
         android:src="@drawable/arrow_back"
@@ -37,6 +37,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:id="@+id/number1"
+            android:inputType="number"
+            android:textAlignment="center"
             android:minHeight="48dp"
             android:background="@drawable/edittext_style"
             android:layout_marginRight="16dp"
@@ -44,6 +47,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:id="@+id/number2"
+            android:inputType="number"
+            android:textAlignment="center"
             android:minHeight="48dp"
             android:background="@drawable/edittext_style"
             android:layout_marginRight="16dp"
@@ -51,6 +57,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:id="@+id/number3"
+            android:inputType="number"
+            android:textAlignment="center"
             android:minHeight="48dp"
             android:background="@drawable/edittext_style"
             android:layout_marginRight="16dp"
@@ -58,6 +67,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:id="@+id/number4"
+            android:inputType="number"
+            android:textAlignment="center"
             android:minHeight="48dp"
             android:background="@drawable/edittext_style"
             android:layout_marginRight="16dp"

@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.medic.R;
-import com.example.medic.VerificationActivity;
+import com.example.medic.Verification.VerificationActivity;
 
 public class RegistrationActivity extends AppCompatActivity {
 
