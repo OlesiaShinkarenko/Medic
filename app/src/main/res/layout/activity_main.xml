@@ -15,7 +15,7 @@
         android:textSize="20sp"
         android:layout_marginLeft="30dp"
         android:textColor="@color/skip_color"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="17dp"
         android:layout_height="wrap_content"/>
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="67dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="17dp"
         android:src="@drawable/logo"
         app:layout_constraintLeft_toRightOf="@id/skip"
         app:layout_constraintRight_toRightOf="parent"
