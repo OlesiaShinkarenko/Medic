@@ -40,23 +40,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/board1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="9dp"
-            android:src="@drawable/board_true" />
-        <ImageView
-            android:id="@+id/board2"
-            android:src="@drawable/board_false"
-            android:layout_marginRight="9dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:id="@+id/board3"
-            android:src="@drawable/board_false"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
