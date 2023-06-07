@@ -63,4 +63,7 @@
     <string name="name_banners">Чек-ап для\nмужчин</string>
     <string name="subscription_banners">9 исследований</string>
     <string name="cost_banners">8000 ₽</string>
+
+    <!-- splash screen -->
+    <string name="pref_previously_started">true</string>
 </resources>

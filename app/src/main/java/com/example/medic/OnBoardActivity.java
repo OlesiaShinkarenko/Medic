@@ -23,6 +23,7 @@ public class OnBoardActivity extends AppCompatActivity {
     private ViewPager2 onboardViewPager;
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
     private TextView skip;
+    private Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,15 @@ public class OnBoardActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 setCurrentIndicator(position);
+            }
+        });
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i = new Intent(OnBoardActivity.this,RegistrationActivity.class);
+                startActivity(i);
+                finish();
             }
         });
     }
@@ -90,24 +100,9 @@ public class OnBoardActivity extends AppCompatActivity {
 
         if (index == onBoardingAdapter.getItemCount() - 1){
             skip.setText(String.valueOf(getResources().getText(R.string.complete)));
-            skip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(),RegistrationActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            });
         }
        else {
                 skip.setText(String.valueOf(getResources().getText(R.string.skip)));
-                skip.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setCurrentIndicator(current_page.getChildCount()-1);
-                        onboardViewPager.setCurrentItem(onBoardingAdapter.getItemCount() - 1);
-                    }
-                });
     }
 
     }
