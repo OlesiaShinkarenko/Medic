@@ -20,7 +20,6 @@ public class OnBoardActivity extends AppCompatActivity {
 
     private  OnBoardingAdapter onBoardingAdapter;
     private LinearLayout current_page;
-    private ImageView[] indicators;
     private ViewPager2 onboardViewPager;
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
     private TextView skip;
@@ -39,7 +38,6 @@ public class OnBoardActivity extends AppCompatActivity {
         onboardViewPager = findViewById(R.id.viewpager);
         onboardViewPager.setAdapter(onBoardingAdapter);
 
-        setupOnboardingIndicators();
 
         setCurrentIndicator(0);
         onboardViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -77,19 +75,7 @@ public class OnBoardActivity extends AppCompatActivity {
         onBoardingAdapter = new OnBoardingAdapter(onboardingItems);
     }
 
-    private void setupOnboardingIndicators(){
-        indicators = new ImageView[onBoardingAdapter.getItemCount()];
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.setMargins(0,0,9,0);
-        for (int i = 0;i<indicators.length;i++){
-            indicators[i] = new ImageView(getApplicationContext());
-            indicators[i].setImageResource(R.drawable.board_false);
-            indicators[i].setLayoutParams(layoutParams);
-            current_page.addView(indicators[i]);
-        }
-    }
+
 
     private void setCurrentIndicator(int index) {
         int childCount = current_page.getChildCount();
@@ -123,8 +109,6 @@ public class OnBoardActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 
     }
 }
