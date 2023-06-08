@@ -3,8 +3,6 @@ package com.example.medic.Verification;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.icu.util.Calendar;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -16,15 +14,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.medic.CreatePasswordActivity;
+import com.example.medic.CreatePassword.CreatePasswordActivity;
 import com.example.medic.R;
 
-import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class VerificationActivity extends AppCompatActivity {
 

@@ -15,10 +15,10 @@
             android:name=".MainScreen"
             android:exported="false" />
         <activity
-            android:name=".CreateCardActivity"
+            android:name=".CreateCard.CreateCardActivity"
             android:exported="false" />
         <activity
-            android:name=".CreatePasswordActivity"
+            android:name=".CreatePassword.CreatePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".Verification.VerificationActivity"
