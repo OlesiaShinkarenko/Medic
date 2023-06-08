@@ -3,7 +3,9 @@ package com.example.medic.Onboard;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -26,12 +28,29 @@ public class OnBoardActivity extends AppCompatActivity {
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
     private TextView skip;
     private Intent i;
+    private static final String MY_SETTINGS = "my_settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboard);
+
+        SharedPreferences sp = getSharedPreferences(MY_SETTINGS,
+                Context.MODE_PRIVATE);
+
+        boolean hasVisited = sp.getBoolean("hasVisited", false);
+
+        if (!hasVisited) {
+            SharedPreferences.Editor e = sp.edit();
+            e.putBoolean("hasVisited", true);
+            e.commit();
+        }
+        else {
+            i = new Intent(OnBoardActivity.this, RegistrationActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         current_page = findViewById(R.id.current_page);
         skip = findViewById(R.id.skip);
@@ -50,6 +69,9 @@ public class OnBoardActivity extends AppCompatActivity {
                 setCurrentIndicator(position);
             }
         });
+
+
+
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override

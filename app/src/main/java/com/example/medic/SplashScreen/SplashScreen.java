@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.preference.PreferenceManager;
+import android.preference.PreferenceManager;
+
+
 
 import com.example.medic.Onboard.OnBoardActivity;
 import com.example.medic.R;
@@ -25,17 +27,9 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
 
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                boolean previouslyStarted = prefs.getBoolean(getString(R.string.pref_previously_started), false);
-                if(!previouslyStarted) {
-                    SharedPreferences.Editor edit = prefs.edit();
-                    edit.putBoolean(getString(R.string.pref_previously_started), Boolean.TRUE);
-                    edit.commit();
+
                    i = new Intent(SplashScreen.this, OnBoardActivity.class);
 
-                }else {
-                    i = new Intent(SplashScreen.this, RegistrationActivity.class);
-                }
                 startActivity(i);
                 finish();
 
