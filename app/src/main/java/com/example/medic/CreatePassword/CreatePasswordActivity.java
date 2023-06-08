@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.example.medic.R;
 public class CreatePasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView skip;
+    ImageButton delete;
     ImageView indicator1,indicator2,indicator3, indicator4;
     Integer kol_click = 0;
     String password = "";
@@ -49,7 +52,8 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         number7 = findViewById(R.id.number7);
         number8 = findViewById(R.id.number8);
         number9 = findViewById(R.id.number9);
-
+        delete = findViewById(R.id.delete);
+        delete.setEnabled(false);
 
         number0.setOnClickListener(this::onClick);
         number1.setOnClickListener(this::onClick);
@@ -61,6 +65,7 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         number7.setOnClickListener(this::onClick);
         number8.setOnClickListener(this::onClick);
         number9.setOnClickListener(this::onClick);
+        delete.setOnClickListener(this::onClick);
 
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,14 +81,28 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
 
     }
     private void CheckClick(){
-        if (kol_click ==1){
+        if (kol_click ==0){
+            indicator1.setImageResource(R.drawable.create_password_false);
+            indicator2.setImageResource(R.drawable.create_password_false);
+            indicator3.setImageResource(R.drawable.create_password_false);
+            indicator4.setImageResource(R.drawable.create_password_false);
+        }else if (kol_click ==1){
+            delete.setEnabled(true);
             indicator1.setImageResource(R.drawable.create_password_true);
+            indicator2.setImageResource(R.drawable.create_password_false);
+            indicator3.setImageResource(R.drawable.create_password_false);
+            indicator4.setImageResource(R.drawable.create_password_false);
         }else if(kol_click==2){
+            indicator1.setImageResource(R.drawable.create_password_true);
             indicator2.setImageResource(R.drawable.create_password_true);
+            indicator3.setImageResource(R.drawable.create_password_false);
+            indicator4.setImageResource(R.drawable.create_password_false);
         }else if(kol_click==3){
+            indicator2.setImageResource(R.drawable.create_password_true);
+            indicator1.setImageResource(R.drawable.create_password_true);
             indicator3.setImageResource(R.drawable.create_password_true);
-        }else
-        {
+            indicator4.setImageResource(R.drawable.create_password_false);
+        }else if (kol_click ==4) {
             indicator4.setImageResource(R.drawable.create_password_true);
             SharedPreferences.Editor r = sp.edit();
             r.putBoolean("hasSkipped",false);
@@ -96,9 +115,14 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onClick(View view) {
-        Button button = (Button) view;
-        password += button.getText().toString();
-        kol_click++;
+        if (view.getId()==R.id.delete){
+           password = password.substring(0,password.length()-1);
+           kol_click --;
+        }else {
+            Button button = (Button) view;
+            password += button.getText().toString();
+            kol_click++;
+        }
         CheckClick();
     }
 }
