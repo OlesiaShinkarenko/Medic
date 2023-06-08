@@ -26,7 +26,7 @@
         tools:layout="@layout/fragment_profile" />
     <activity
         android:id="@+id/mainScreen"
-        android:name="com.example.medic.MainScreen"
+        android:name="com.example.medic.MainScreenActivity"
         android:label="activity_main_screen"
         tools:layout="@layout/activity_main_screen" />
 </navigation>
