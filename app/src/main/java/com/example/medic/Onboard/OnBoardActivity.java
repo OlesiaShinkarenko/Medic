@@ -1,4 +1,4 @@
-package com.example.medic;
+package com.example.medic.Onboard;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.medic.R;
+import com.example.medic.Registration.RegistrationActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +20,12 @@ import java.util.List;
 public class OnBoardActivity extends AppCompatActivity {
 
 
-    private  OnBoardingAdapter onBoardingAdapter;
+    private OnBoardingAdapter onBoardingAdapter;
     private LinearLayout current_page;
-    private ImageView[] indicators;
     private ViewPager2 onboardViewPager;
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
     private TextView skip;
+    private Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,6 @@ public class OnBoardActivity extends AppCompatActivity {
         onboardViewPager = findViewById(R.id.viewpager);
         onboardViewPager.setAdapter(onBoardingAdapter);
 
-        setupOnboardingIndicators();
 
         setCurrentIndicator(0);
         onboardViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -47,6 +48,15 @@ public class OnBoardActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 setCurrentIndicator(position);
+            }
+        });
+
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                i = new Intent(OnBoardActivity.this, RegistrationActivity.class);
+                startActivity(i);
+                finish();
             }
         });
     }
@@ -77,19 +87,7 @@ public class OnBoardActivity extends AppCompatActivity {
         onBoardingAdapter = new OnBoardingAdapter(onboardingItems);
     }
 
-    private void setupOnboardingIndicators(){
-        indicators = new ImageView[onBoardingAdapter.getItemCount()];
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.setMargins(0,0,9,0);
-        for (int i = 0;i<indicators.length;i++){
-            indicators[i] = new ImageView(getApplicationContext());
-            indicators[i].setImageResource(R.drawable.board_false);
-            indicators[i].setLayoutParams(layoutParams);
-            current_page.addView(indicators[i]);
-        }
-    }
+
 
     private void setCurrentIndicator(int index) {
         int childCount = current_page.getChildCount();
@@ -104,27 +102,10 @@ public class OnBoardActivity extends AppCompatActivity {
 
         if (index == onBoardingAdapter.getItemCount() - 1){
             skip.setText(String.valueOf(getResources().getText(R.string.complete)));
-            skip.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(getApplicationContext(),RegistrationActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            });
         }
        else {
                 skip.setText(String.valueOf(getResources().getText(R.string.skip)));
-                skip.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setCurrentIndicator(current_page.getChildCount()-1);
-                        onboardViewPager.setCurrentItem(onBoardingAdapter.getItemCount() - 1);
-                    }
-                });
     }
-
-
 
     }
 }

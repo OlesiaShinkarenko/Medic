@@ -1,4 +1,4 @@
-package com.example.medic;
+package com.example.medic.Onboard;
 
 public class OnboardingItem {
     private int image;

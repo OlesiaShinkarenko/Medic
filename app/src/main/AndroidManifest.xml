@@ -21,22 +21,24 @@
             android:name=".CreatePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".VerificationActivity"
+            android:name=".Verification.VerificationActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".Registration.RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".SlpashScreen"
-            android:exported="false" />
-        <activity
-            android:name=".OnBoardActivity"
-            android:exported="true">
+            android:name=".SplashScreen.SplashScreen"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".Onboard.OnBoardActivity"
+            android:exported="false">
+
         </activity>
     </application>
 

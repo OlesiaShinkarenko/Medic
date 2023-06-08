@@ -1,4 +1,4 @@
-package com.example.medic;
+package com.example.medic.Onboard;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.medic.R;
 
 import java.util.List;
 
