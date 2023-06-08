@@ -28,7 +28,7 @@ public class OnBoardActivity extends AppCompatActivity {
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
     private TextView skip;
     private Intent i;
-    private static final String MY_SETTINGS = "my_settings";
+    private static final String MY_SETTINGS = "my_settings_OnBoard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
