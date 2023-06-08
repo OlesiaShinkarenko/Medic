@@ -63,7 +63,6 @@ public class VerificationActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==1){
                     number2.requestFocus();
-                    code_from_text+=s;
                 }
             }
 
@@ -102,7 +101,6 @@ public class VerificationActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.length() ==1){
                     number4.requestFocus();
-                    code_from_text+=charSequence;
                 }
             }
             @Override
@@ -118,7 +116,7 @@ public class VerificationActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                code_from_text+=charSequence;
+               code_from_text =  number1.getText().toString()+number2.getText()+number3.getText()+charSequence;
                 if( code_from_text.equals(randomCode)){
                     Intent intent = new Intent(VerificationActivity.this, CreatePasswordActivity.class);
                     startActivity(intent);

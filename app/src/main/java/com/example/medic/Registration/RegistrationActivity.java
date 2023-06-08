@@ -63,7 +63,5 @@ public class RegistrationActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-
     }
 }
