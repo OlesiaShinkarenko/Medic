@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +26,12 @@ public class VerificationActivity extends AppCompatActivity {
     EditText number1,number2, number3,number4;
     TextView return_code;
 
+
     String code_from_text = "";
     CountDownTimer count;
 
     String randomCode;
+
 
 
     @Override
@@ -42,6 +45,7 @@ public class VerificationActivity extends AppCompatActivity {
         number3 = findViewById(R.id.number3);
         number4 = findViewById(R.id.number4);
         return_code = findViewById(R.id.return_code);
+
 
         New_code();
 
@@ -160,5 +164,6 @@ public class VerificationActivity extends AppCompatActivity {
             }
         }.start();
     }
+
 
 }
