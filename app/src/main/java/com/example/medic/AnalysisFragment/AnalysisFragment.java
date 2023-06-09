@@ -10,10 +10,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.medic.R;
+import com.example.medic.RetrofitClient;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AnalysisFragment extends Fragment {
@@ -21,6 +28,7 @@ public class AnalysisFragment extends Fragment {
     ArrayList<DiscountAndNews> discountAndNews = new ArrayList<>();
 
     RecyclerView recycle_view_banners;
+    DiscountAdapter adapter;
     public AnalysisFragment() {
         // Required empty public constructor
     }
@@ -28,15 +36,27 @@ public class AnalysisFragment extends Fragment {
     @Override
     public void onViewCreated( View view, Bundle savedInstanceState) {
         recycle_view_banners = view.findViewById(R.id.recycle_view_banners);
-        setData();
-        DiscountAdapter adapter = new DiscountAdapter(discountAndNews,getActivity().getApplicationContext());
+        adapter = new DiscountAdapter(discountAndNews,getActivity().getApplicationContext());
         recycle_view_banners.setAdapter(adapter);
+        setData();
         super.onViewCreated(view, savedInstanceState);
     }
 
     private void setData() {
-        discountAndNews.add(new DiscountAndNews(getString(R.string.name_banners),getString(R.string.subscription_banners),R.drawable.banner_img));
-        discountAndNews.add(new DiscountAndNews(getString(R.string.name_banners2),getString(R.string.subscription_banners2),R.drawable.banner_img));
+        RetrofitClient.getRetrofitClient().getDiscounts().enqueue(new Callback<List<DiscountAndNews>>() {
+            @Override
+            public void onResponse(Call<List<DiscountAndNews>> call, Response<List<DiscountAndNews>> response) {
+                if(response.isSuccessful() && response.body()!=null) {
+                    discountAndNews.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<DiscountAndNews>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override

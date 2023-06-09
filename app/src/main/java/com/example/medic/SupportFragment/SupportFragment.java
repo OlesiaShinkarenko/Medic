@@ -1,4 +1,4 @@
-package com.example.medic.Verification;
+package com.example.medic.SupportFragment;
 
 import android.os.Bundle;
 

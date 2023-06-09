@@ -1,6 +1,5 @@
 package com.example.medic.MainScreen;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -10,7 +9,7 @@ import com.example.medic.AnalysisFragment.AnalysisFragment;
 import com.example.medic.ProfileFragment.ProfileFragment;
 import com.example.medic.R;
 import com.example.medic.ResultFragment.ResultFragment;
-import com.example.medic.Verification.SupportFragment;
+import com.example.medic.SupportFragment.SupportFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

@@ -31,9 +31,9 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         DiscountAndNews discountAndNews1 = discountAndNews.get(position);
-        holder.imageView.setImageResource(discountAndNews1.getImage());
         holder.nameView.setText(discountAndNews1.getName());
         holder.descriptionView.setText(discountAndNews1.getDescription());
+        holder.priceView.setText(discountAndNews1.getPrice());
     }
 
     @Override
@@ -43,15 +43,14 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView nameView, descriptionView;
-        private ImageView imageView;
+        private TextView nameView, descriptionView, priceView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             nameView = itemView.findViewById(R.id.name_banner);
             descriptionView = itemView.findViewById(R.id.description_banner);
-            imageView = itemView.findViewById(R.id.img_banner);
+            priceView = itemView.findViewById(R.id.price_banner);
         }
     }
 }
