@@ -3,7 +3,7 @@
 
     <item
         android:title="@string/analysis"
-        android:icon="@drawable/icon_analysis_checked"
+        android:icon="@drawable/icon_analysis_unchecked"
         android:id="@+id/bottom_navigation_menu_analysis"
         />
     <item

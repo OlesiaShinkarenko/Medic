@@ -1,8 +1,10 @@
-package com.example.medic;
+package com.example.medic.MainScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.medic.R;
 
 public class MainScreenActivity extends AppCompatActivity {
 

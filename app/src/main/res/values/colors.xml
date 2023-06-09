@@ -19,4 +19,7 @@
     <color name="splash_screen_color1">#6269F0</color>
     <color name="splash_screen_color2">#A63740F5</color>
     <color name="splash_screen_color3">#2254F5</color>
+
+    <!--Bottom navigation -->
+    <color name="bottom_nav">#B8C1CC</color>
 </resources>

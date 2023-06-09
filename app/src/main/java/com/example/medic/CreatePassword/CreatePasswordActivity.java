@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.medic.CreateCard.CreateCardActivity;
-import com.example.medic.MainScreenActivity;
+import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
 
 public class CreatePasswordActivity extends AppCompatActivity implements View.OnClickListener {

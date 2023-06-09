@@ -1,4 +1,4 @@
-package com.example.medic;
+package com.example.medic.AnalysisFragment;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.medic.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ResultFragment#newInstance} factory method to
+ * Use the {@link AnalysisFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ResultFragment extends Fragment {
+public class AnalysisFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class ResultFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public ResultFragment() {
+    public AnalysisFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class ResultFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ResultFragment.
+     * @return A new instance of fragment AnalysisFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ResultFragment newInstance(String param1, String param2) {
-        ResultFragment fragment = new ResultFragment();
+    public static AnalysisFragment newInstance(String param1, String param2) {
+        AnalysisFragment fragment = new AnalysisFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +61,6 @@ public class ResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_result, container, false);
+        return inflater.inflate(R.layout.fragment_analysis, container, false);
     }
 }

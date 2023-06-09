@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.medic.MainScreenActivity;
+import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
 import com.example.medic.Verification.VerificationActivity;
 
