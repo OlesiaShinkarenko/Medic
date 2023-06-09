@@ -1,20 +1,34 @@
 package com.example.medic.AnalysisFragment;
 
+import android.icu.number.IntegerWidth;
+
 public class DiscountAndNews {
 
     private Integer id;
-    private String price;
+
     private String name;
+
+
+
+    private String price;
     private String description;
     private String image;
 
-    public DiscountAndNews(String name, String description, String price,String image) {
+    public DiscountAndNews(Integer id,String name, String description, String price, String image) {
+        this.id = id;
         this.price = price;
         this.name = name;
         this.description = description;
         this.image = image;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
