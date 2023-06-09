@@ -34,6 +34,10 @@ public class MainScreenActivity extends AppCompatActivity {
 
 
         bottom_navigation_menu.setSelectedItemId(R.id.bottom_navigation_menu_analysis);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame_fragment, analysisFragment)
+                .commit();
         bottom_navigation_menu.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {

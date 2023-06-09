@@ -1,64 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AnalysisFragment.AnalysisFragment">
 
-    <EditText
-        app:layout_constraintTop_toTopOf="parent"
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:id="@+id/search_analysis"
-        android:drawableLeft="@drawable/search_icon"
         android:layout_width="match_parent"
-        android:drawablePadding="8dp"
-        android:textColorHint="@color/AfternameOnBoard_color"
-        android:hint="@string/search_analysis"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/discount_and_news"
-        android:textSize="17sp"
-        android:textColor="@color/AfternameOnBoard_color"
-        android:text="@string/discount_and_news"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@id/search_analysis"
-        app:layout_constraintLeft_toLeftOf="@id/search_analysis"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_banners"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/discount_and_news"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/catalog_analysis"
-        android:textColor="@color/AfternameOnBoard_color"
-        android:textSize="17sp"
-        android:text="@string/catalog_analysis"
-        android:layout_marginTop="32dp"
-        app:layout_constraintLeft_toLeftOf="@id/recycle_view_banners"
-        app:layout_constraintTop_toBottomOf="@id/recycle_view_banners"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_catalog_name"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintLeft_toLeftOf="@id/catalog_analysis"
-        app:layout_constraintTop_toBottomOf="@id/catalog_analysis"
-        android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="24dp"
-        android:layout_marginHorizontal="20dp"
-        android:id="@+id/recycle_view_catalog"
-        app:layout_constraintTop_toBottomOf="@id/recycle_view_catalog_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <EditText
+            android:padding="14dp"
+            android:background="@drawable/edittext_style"
+            android:id="@+id/search_analysis"
+            android:drawableLeft="@drawable/search_icon"
+            android:layout_width="match_parent"
+            android:drawablePadding="8dp"
+            android:textColorHint="@color/AfternameOnBoard_color"
+            android:hint="@string/search_analysis"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/discount_and_news"
+            android:textSize="17sp"
+            android:textColor="@color/AfternameOnBoard_color"
+            android:text="@string/discount_and_news"
+            android:layout_marginTop="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_view_banners"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="16dp"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/catalog_analysis"
+            android:textColor="@color/AfternameOnBoard_color"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="@string/catalog_analysis"
+            android:layout_marginTop="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+
+            android:id="@+id/recycle_view_catalog_name"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="24dp"
+            android:id="@+id/recycle_view_catalog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</ScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
