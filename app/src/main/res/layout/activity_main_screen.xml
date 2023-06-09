@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainScreen.MainScreenActivity">
     <FrameLayout
+        android:id="@+id/frame_fragment"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation_menu"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
@@ -14,7 +15,10 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:id="@+id/bottom_navigation_menu"
+        app:labelVisibilityMode="labeled"
         android:background="@color/white"
+        app:itemIconTint="@color/bottom_menu_style"
+        app:itemTextColor="@color/bottom_menu_style"
         app:menu="@menu/bottom_navigation_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"/>

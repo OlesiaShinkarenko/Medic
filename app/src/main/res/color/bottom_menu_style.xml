@@ -3,9 +3,9 @@
 
     <item
         android:color="@color/bottom_nav"
-        android:state_checked="false"/>
+        android:state_checked="false"
+        />
     <item
         android:color="@color/button_true_enabled"
         android:state_checked="true"/>
-
 </selector>
