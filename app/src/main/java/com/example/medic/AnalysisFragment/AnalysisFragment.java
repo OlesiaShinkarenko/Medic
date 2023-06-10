@@ -3,39 +3,30 @@ package com.example.medic.AnalysisFragment;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 
 import com.example.medic.R;
-import com.example.medic.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class AnalysisFragment extends Fragment {
 
-    List<DiscountAndNews> discountAndNews = new ArrayList<>();
+    List<DiscountAndNews> discountAndNews ;
+    List<String> categories;
 
-    RecyclerView recycle_view_banners;
+    RecyclerView recycle_view_banners, recycle_view_catalog_name;
     DiscountAdapter adapter;
-    private Context context;
 
-    public AnalysisFragment() {
-        // Required empty public constructor
-    }
+    private Context context;
 
 
     @Override
@@ -43,20 +34,26 @@ public class AnalysisFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_analysis, container, false);
         context = this.getActivity();
-        // Add the following lines to create RecyclerView
+
+        recycle_view_catalog_name = view.findViewById(R.id.recycle_view_catalog_name);
         recycle_view_banners = view.findViewById(R.id.recycle_view_banners);
+
+        discountAndNews = new ArrayList<>();
+        categories = new ArrayList<>();
+
         adapter = new DiscountAdapter(discountAndNews,context);
+
         recycle_view_banners.setAdapter(adapter);
+        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(categories, context);
+        recycle_view_catalog_name.setAdapter(categoriesAdapter);
         setData();
         return view;
     }
 
     private void setData() {
-        RetrofitClient.getRetrofitClient().getDiscounts().enqueue(new Callback<List<DiscountAndNews>>() {
+       /* RetrofitClient.getRetrofitClient().getDiscounts().enqueue(new Callback<List<DiscountAndNews>>() {
             @Override
             public void onResponse(Call<List<DiscountAndNews>> call, Response<List<DiscountAndNews>> response) {
                 if(response.isSuccessful()&&response.body()!=null){
@@ -70,6 +67,12 @@ public class AnalysisFragment extends Fragment {
 
             }
         });
+        */
+        discountAndNews.add(new DiscountAndNews(1,"ff","fgfg","fgfg","fgfg"));
+        discountAndNews.add(new DiscountAndNews(2,"gfddgs","fdg","34","df"));
+        categories.add("kgoihjg");
+        categories.add("ghfgh");
+        categories.add("rewr");
     }
 
     @Override

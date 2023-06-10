@@ -22,4 +22,7 @@
 
     <!--Bottom navigation -->
     <color name="bottom_nav">#B8C1CC</color>
+
+    <!-- categories -->
+    <color name="color_categories">#7E7E9A</color>
 </resources>

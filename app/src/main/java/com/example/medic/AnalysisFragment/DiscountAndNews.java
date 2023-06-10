@@ -1,7 +1,5 @@
 package com.example.medic.AnalysisFragment;
 
-import android.icu.number.IntegerWidth;
-
 public class DiscountAndNews {
 
     private Integer id;
