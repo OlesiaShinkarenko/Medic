@@ -8,8 +8,6 @@ public class DiscountAndNews {
 
     private String name;
 
-
-
     private String price;
     private String description;
     private String image;
