@@ -7,6 +7,7 @@ import androidx.core.view.MotionEventCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -28,6 +29,8 @@ public class AnalysisFragment extends Fragment   {
     List<DiscountAndNews> discountAndNews ;
 
     NestedScrollView scrollview;
+
+    SwipeRefreshLayout swipe_refresh_layout;
     List<String> categories;
     List<Analysis> analyses;
 
@@ -52,6 +55,7 @@ public class AnalysisFragment extends Fragment   {
         scrollview = view.findViewById(R.id.scrollview);
         discount_and_news = view.findViewById(R.id.discount_and_news);
         catalog_analysis = view.findViewById(R.id.catalog_analysis);
+        swipe_refresh_layout = view.findViewById(R.id.swipe_refresh_layout);
 
         discountAndNews = new ArrayList<>();
         categories = new ArrayList<>();
@@ -67,7 +71,17 @@ public class AnalysisFragment extends Fragment   {
         AnalysisAdapter analysisAdapter = new AnalysisAdapter(analyses,context);
         recycle_view_catalog.setAdapter(analysisAdapter);
 
+        swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setData();
+                swipe_refresh_layout.setRefreshing(false);
+                adapter.notifyDataSetChanged();
+                categoriesAdapter.notifyDataSetChanged();
+                analysisAdapter.notifyDataSetChanged();
 
+            }
+        });
         setData();
         return view;
     }
