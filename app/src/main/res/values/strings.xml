@@ -76,4 +76,7 @@
 
     <!-- splash screen -->
     <string name="pref_previously_started">true</string>
+
+    <!--search -->
+    <string name="cancel">Отменить</string>
 </resources>

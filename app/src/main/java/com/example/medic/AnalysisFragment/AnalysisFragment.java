@@ -1,6 +1,7 @@
 package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.view.MotionEventCompat;
@@ -15,10 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.medic.R;
+import com.example.medic.SearchActivity.SearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,7 @@ public class AnalysisFragment extends Fragment   {
     List<String> categories;
     List<Analysis> analyses;
 
+    EditText search_analysis;
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
     DiscountAdapter adapter;
     TextView discount_and_news, catalog_analysis;
@@ -56,6 +60,7 @@ public class AnalysisFragment extends Fragment   {
         discount_and_news = view.findViewById(R.id.discount_and_news);
         catalog_analysis = view.findViewById(R.id.catalog_analysis);
         swipe_refresh_layout = view.findViewById(R.id.swipe_refresh_layout);
+        search_analysis = view.findViewById(R.id.search_analysis);
 
         discountAndNews = new ArrayList<>();
         categories = new ArrayList<>();
@@ -70,7 +75,13 @@ public class AnalysisFragment extends Fragment   {
 
         AnalysisAdapter analysisAdapter = new AnalysisAdapter(analyses,context);
         recycle_view_catalog.setAdapter(analysisAdapter);
-
+        search_analysis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, SearchActivity.class);
+                startActivity(i);
+            }
+        });
         swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -83,6 +94,8 @@ public class AnalysisFragment extends Fragment   {
             }
         });
         setData();
+
+
         return view;
     }
 
