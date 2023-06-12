@@ -62,6 +62,7 @@
     <string name="add_analysis">Добавить</string>
     <string name="discount_and_news">Акции и новости</string>
     <string name="catalog_analysis">Каталог анализов</string>
+    <string name="delete">Убрать</string>
 
     <!--banners -->
     <string name="name_banners">Чек-ап для\nмужчин</string>
@@ -81,4 +82,11 @@
     <!-- profile-->
     <string name="profile_title">Карта пациента</string>
     <string name="save_profile">Сохранить</string>
+
+    <!-- card_product -->
+    <string name="description">Описание</string>
+    <string name="preparation">Подготовка</string>
+    <string name="results_in">Результаты через:</string>
+    <string name="bio">Биоматериал:</string>
+
 </resources>

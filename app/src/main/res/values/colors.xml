@@ -26,7 +26,9 @@
     <!-- categories -->
     <color name="color_categories">#7E7E9A</color>
 
-    <!-- -->
+    <!-- profile-->
     <color name="color_image">#80D9D9D9</color>
 
+    <color name="icon_cancel_color">#F5F6F7</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

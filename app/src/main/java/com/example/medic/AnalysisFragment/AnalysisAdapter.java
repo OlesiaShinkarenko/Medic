@@ -1,6 +1,8 @@
 package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 
@@ -18,9 +21,11 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
 
     private LayoutInflater inflater;
     private List<Analysis> analyses;
+    private Context context;
 
     public AnalysisAdapter(List<Analysis> analyses, Context context) {
         this.inflater = LayoutInflater.from(context);
+        this.context = context;
         this.analyses = analyses;
     }
 
@@ -47,6 +52,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
 
         TextView name_analysis, time_analysis,price_analysis;
         Button button_add;
+        BottomSheetDialog dialog;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,6 +65,29 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
+            if(!button_add.isSelected()){
+                dialog = new BottomSheetDialog(context);
+                dialog.setContentView(R.layout.card_product);
+                dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+                dialog.findViewById(R.id.button_add).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        button_add.setText(itemView.getResources().getText(R.string.delete));
+                        button_add.setSelected(true);
+                        dialog.cancel();
+
+                    }
+                });
+                dialog.show();
+            }else {
+                button_add.setSelected(false);
+                button_add.setText(itemView.getResources().getText(R.string.add_analysis));
+            }
 
         }
     }

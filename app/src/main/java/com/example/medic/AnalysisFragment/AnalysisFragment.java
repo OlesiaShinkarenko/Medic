@@ -4,20 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.medic.R;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
+import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,12 +91,25 @@ public class AnalysisFragment extends Fragment   {
                 adapter.notifyDataSetChanged();
                 categoriesAdapter.notifyDataSetChanged();
                 analysisAdapter.notifyDataSetChanged();
-
             }
         });
         setData();
 
+        scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (scrollY>recycle_view_banners.getScrollY()){
+                    discount_and_news.setVisibility(View.GONE);
+                    recycle_view_banners.setVisibility(View.GONE);
+                    catalog_analysis.setVisibility(View.INVISIBLE);
+                }else {
+                    discount_and_news.setVisibility(View.VISIBLE);
+                    recycle_view_banners.setVisibility(View.VISIBLE);
+                    catalog_analysis.setVisibility(View.VISIBLE);
+                }
+            }
 
+        });
         return view;
     }
 
