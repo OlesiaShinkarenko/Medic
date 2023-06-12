@@ -1,4 +1,4 @@
-package com.example.medic.AnalysisFragment;
+package com.example.medic.common;
 
 public class Analysis {
     private int id;

@@ -4,24 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.core.view.MotionEventCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.medic.R;
 import com.example.medic.SearchActivity.SearchActivity;
+import com.example.medic.common.Analysis;
 
 import java.util.ArrayList;
 import java.util.List;

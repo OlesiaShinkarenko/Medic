@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="searchTextHiglight">
+        <item name="android:textColor">@color/button_true_enabled</item>
+    </style>
+</resources>

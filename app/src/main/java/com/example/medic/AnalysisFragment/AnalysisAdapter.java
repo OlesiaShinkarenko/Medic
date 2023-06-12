@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
+import com.example.medic.common.Analysis;
 
 import java.util.List;
 
