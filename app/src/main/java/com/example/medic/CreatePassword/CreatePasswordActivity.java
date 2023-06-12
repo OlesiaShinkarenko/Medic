@@ -27,7 +27,8 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
     Button number0,number1,number2,number3,number4,number5,number6,number7,number8,number9;
 
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
-    SharedPreferences sp;
+    private static final String MY_SETTINGS2 = "my_settings_CreateCard";
+    SharedPreferences sp,sp2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_create_password);
 
         sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+        sp2 = getSharedPreferences(MY_SETTINGS2, Context.MODE_PRIVATE);
 
         skip = findViewById(R.id.skip);
         indicator1 = findViewById(R.id.indicator1);
@@ -72,6 +74,9 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                 SharedPreferences.Editor r = sp.edit();
                 r.putBoolean("hasSkipped",true);
                 r.commit();
+                SharedPreferences.Editor r2 = sp2.edit();
+                r2.putBoolean("hasSkipped",true);
+                r2.commit();
                 Intent i = new Intent(CreatePasswordActivity.this, MainScreenActivity.class);
                 startActivity(i);
                 finish();
@@ -106,6 +111,9 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
             SharedPreferences.Editor r = sp.edit();
             r.putBoolean("hasSkipped",false);
             r.commit();
+            SharedPreferences.Editor r2 = sp2.edit();
+            r2.putBoolean("hasSkipped",false);
+            r2.commit();
             Intent i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
             startActivity(i);
             finish();

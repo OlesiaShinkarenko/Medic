@@ -2,7 +2,9 @@ package com.example.medic.CreateCard;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +28,10 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
     Button btn_create_card;
     EditText editText_name, editText_lastname, editText_surname, editText_date_birthday;
 
+    private static final String MY_SETTINGS = "my_settings_CreateCard";
+    SharedPreferences sp;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +46,14 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
         editText_date_birthday = findViewById(R.id.editText_date_birthday);
         skip = findViewById(R.id.skip);
 
+        sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences.Editor r = sp.edit();
+                r.putBoolean("hasSkipped",true);
+                r.commit();
                 NextActivity();
             }
         });
@@ -50,6 +61,9 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
         btn_create_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences.Editor r = sp.edit();
+                r.putBoolean("hasSkipped",false);
+                r.commit();
                 NextActivity();
             }
         });
