@@ -54,8 +54,6 @@
 
     <!--main screen-->
     <string name="search_analysis">Искать анализы</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--analysis -->
     <string name="name_analysis">ПЦР-тест на определение РНК коронавируса стандартный</string>
@@ -79,4 +77,8 @@
 
     <!--search -->
     <string name="cancel">Отменить</string>
+
+    <!-- profile-->
+    <string name="profile_title">Карта пациента</string>
+    <string name="save_profile">Сохранить</string>
 </resources>

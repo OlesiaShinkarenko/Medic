@@ -26,4 +26,7 @@
     <!-- categories -->
     <color name="color_categories">#7E7E9A</color>
 
+    <!-- -->
+    <color name="color_image">#80D9D9D9</color>
+
 </resources>
