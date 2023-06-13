@@ -101,6 +101,7 @@ public class AnalysisFragment extends Fragment   {
         });
         setData();
 
+        /*
         scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
@@ -119,6 +120,7 @@ public class AnalysisFragment extends Fragment   {
 
         });
 
+         */
 
         in_basket.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -91,4 +91,15 @@
     <string name="add_with">Добавить за %1$s</string>
 
     <string name="in_basket">В корзину</string>
+
+    <string name="basket">Корзина</string>
+
+    <string name="execution_in">Перейти к оформлению заказа</string>
+
+
+    <plurals name="patient">
+        <item quantity="one">%d пациент</item>
+        <item quantity="two">%d пациента</item>
+        <item quantity="other">%d пациента</item>
+    </plurals>
 </resources>

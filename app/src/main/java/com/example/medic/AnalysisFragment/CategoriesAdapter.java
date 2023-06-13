@@ -15,18 +15,18 @@ import java.util.List;
 
 public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder>{
 
-    private LayoutInflater inflater;
+ private Context context;
     private int selectedPos = RecyclerView.NO_POSITION;
     private List<String> categories;
 
     public CategoriesAdapter(List<String> categories, Context context) {
-        this.inflater = LayoutInflater.from(context);
+        this.context = context;
         this.categories = categories;
     }
 
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_catalog, parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_catalog, parent,false);
         return new ViewHolder(view);
     }
 
