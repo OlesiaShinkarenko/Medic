@@ -110,6 +110,7 @@
                 android:layout_height="match_parent"/>
         </LinearLayout>
         <Button
+            android:text="@string/add_with"
             android:id="@+id/button_add"
             android:textAllCaps="false"
             android:textSize="16sp"

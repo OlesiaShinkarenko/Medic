@@ -17,8 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.medic.BasketActivity.BasketActivity;
 import com.example.medic.R;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
@@ -33,11 +36,12 @@ public class AnalysisFragment extends Fragment   {
     List<DiscountAndNews> discountAndNews ;
 
     NestedScrollView scrollview;
+    RelativeLayout basket_relativelayout;
 
     SwipeRefreshLayout swipe_refresh_layout;
     List<String> categories;
     List<Analysis> analyses;
-
+    LinearLayout in_basket;
     EditText search_analysis;
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
     DiscountAdapter adapter;
@@ -62,6 +66,8 @@ public class AnalysisFragment extends Fragment   {
         catalog_analysis = view.findViewById(R.id.catalog_analysis);
         swipe_refresh_layout = view.findViewById(R.id.swipe_refresh_layout);
         search_analysis = view.findViewById(R.id.search_analysis);
+        basket_relativelayout = view.findViewById(R.id.basket_relativelayout);
+        in_basket = view.findViewById(R.id.in_basket);
 
         discountAndNews = new ArrayList<>();
         categories = new ArrayList<>();
@@ -102,13 +108,24 @@ public class AnalysisFragment extends Fragment   {
                     discount_and_news.setVisibility(View.GONE);
                     recycle_view_banners.setVisibility(View.GONE);
                     catalog_analysis.setVisibility(View.INVISIBLE);
+                    basket_relativelayout.setVisibility(View.VISIBLE);
                 }else {
                     discount_and_news.setVisibility(View.VISIBLE);
                     recycle_view_banners.setVisibility(View.VISIBLE);
                     catalog_analysis.setVisibility(View.VISIBLE);
+                    basket_relativelayout.setVisibility(View.GONE);
                 }
             }
 
+        });
+
+
+        in_basket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(context, BasketActivity.class);
+                startActivity(i);
+            }
         });
         return view;
     }

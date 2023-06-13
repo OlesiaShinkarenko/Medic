@@ -88,5 +88,7 @@
     <string name="preparation">Подготовка</string>
     <string name="results_in">Результаты через:</string>
     <string name="bio">Биоматериал:</string>
+    <string name="add_with">Добавить за %1$s</string>
 
+    <string name="in_basket">В корзину</string>
 </resources>
