@@ -60,6 +60,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(RegistrationActivity.this, VerificationActivity.class);
+                i.putExtra("email",editText_email.getText().toString());
                 startActivity(i);
             }
         });

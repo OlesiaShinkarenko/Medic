@@ -17,8 +17,15 @@ import android.widget.Toast;
 
 import com.example.medic.CreatePassword.CreatePasswordActivity;
 import com.example.medic.R;
+import com.example.medic.RetrofitClient;
 
+import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class VerificationActivity extends AppCompatActivity {
 
@@ -29,7 +36,7 @@ public class VerificationActivity extends AppCompatActivity {
 
     String code_from_text = "";
     CountDownTimer count;
-
+    String email;
     String randomCode;
 
 
@@ -46,8 +53,22 @@ public class VerificationActivity extends AppCompatActivity {
         number4 = findViewById(R.id.number4);
         return_code = findViewById(R.id.return_code);
 
-
+        email = getIntent().getStringExtra("email");
         New_code();
+
+        RetrofitClient.getRetrofitClient().sendEmail(email).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()&&response!=null){
+                    Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(VerificationActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +185,7 @@ public class VerificationActivity extends AppCompatActivity {
             }
         }.start();
     }
+
 
 
 }

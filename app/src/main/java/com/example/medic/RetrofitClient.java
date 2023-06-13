@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-    private  static final String BASE_URL = "https://virtserver.swaggerhub.com/serk87/APIfood/FRBHWRIOJAFIDSNKJF/api/";
+    private  static final String BASE_URL = "https://medic.madskill.ru/api/";
     private static Retrofit retrofit = null;
 
     public static  APIInterface getRetrofitClient(){
