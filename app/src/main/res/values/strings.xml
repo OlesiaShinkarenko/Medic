@@ -102,4 +102,19 @@
         <item quantity="two">%d пациента</item>
         <item quantity="other">%d пациента</item>
     </plurals>
+
+    <!-- order registration -->
+    <string name="order_registration">Оформление заказа</string>
+    <string name="address">Адрес *</string>
+    <string name="address_hint">Введите ваш адрес</string>
+    <string name="date_time">Дата и время*</string>
+    <string name="date_time_hint">Выберите дату и время</string>
+    <string name="who_analysis">Кто будет сдавать анализы? *</string>
+    <string name="add_patient">Добавить еще пациента</string>
+    <string name="number">Телефон *</string>
+    <string name="comments">Комментарий</string>
+    <string name="wishes">Можете оставить свои пожелания</string>
+    <string name="apple_pay">Оплата Apple Pay</string>
+    <string name="promocode">Промокод</string>
+    <string name="buy">Заказать</string>
 </resources>

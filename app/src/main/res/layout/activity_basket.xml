@@ -11,7 +11,7 @@
         android:padding="11dp"
         android:id="@+id/btn_back"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="wrap_content"

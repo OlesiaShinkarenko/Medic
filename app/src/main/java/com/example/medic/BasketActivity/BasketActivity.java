@@ -3,10 +3,13 @@ package com.example.medic.BasketActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.example.medic.OrderRegistration.OrderRegistrationActivity;
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
 
@@ -19,6 +22,7 @@ public class BasketActivity extends AppCompatActivity {
 
     List<Analysis> analyses = new ArrayList<>();
     RecyclerView recycler_view_basket;
+    Button transition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,7 @@ public class BasketActivity extends AppCompatActivity {
         btn_back = findViewById(R.id.btn_back);
         icon_basket_delete = findViewById(R.id.icon_basket_delete);
         recycler_view_basket = findViewById(R.id.recycler_view_basket);
+        transition = findViewById(R.id.transition);
 
         BasketAnalysisAdapter adapter = new BasketAnalysisAdapter(analyses, this);
         recycler_view_basket.setAdapter(adapter);
@@ -51,5 +56,12 @@ public class BasketActivity extends AppCompatActivity {
             }
         });
 
+        transition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(BasketActivity.this, OrderRegistrationActivity.class);
+                startActivity(i);
+            }
+        });
     }
 }
