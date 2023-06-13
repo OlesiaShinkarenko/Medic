@@ -79,7 +79,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                     public void onClick(View v) {
                         button_add.setText(itemView.getResources().getText(R.string.delete));
                         button_add.setSelected(true);
-                        dialog.cancel();
+                        dialog.dismiss();
 
                     }
                 });

@@ -117,4 +117,19 @@
     <string name="apple_pay">Оплата Apple Pay</string>
     <string name="promocode">Промокод</string>
     <string name="buy">Заказать</string>
+    <string name="address_analysis">Адрес сдачи анализов</string>
+    <string name="your_address">Ваш адрес</string>
+
+    <string name="longitude">Долгота</string>
+    <string name="width">Широта</string>
+    <string name="height">Высота</string>
+
+    <string name="flat">Квартира</string>
+    <string name="entrance">Подъезд</string>
+    <string name="floor">Этаж</string>
+
+    <string name="doorphone">Домофон</string>
+    <string name="save_address">Сохранить этот адрес?</string>
+    <string name="hint_save_address">Название: например дом, работа</string>
+    <string name="confirm_address">Подтвердить</string>
 </resources>
