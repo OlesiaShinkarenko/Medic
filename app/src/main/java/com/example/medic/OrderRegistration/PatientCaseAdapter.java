@@ -17,7 +17,14 @@ public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.
     List<String> patients;
     private int selectedPos = RecyclerView.NO_POSITION;
     Context context;
+    OnItemsCheckStateListener checkStateListener;
 
+    public interface OnItemsCheckStateListener {
+        void onItemCheckStateChanged(int selectedPos);
+    }
+    public void setOnItemsCheckStateListener(OnItemsCheckStateListener checkStateListener) {
+        this.checkStateListener = checkStateListener;
+    }
     public PatientCaseAdapter(List<String> patients, Context context) {
         this.patients = patients;
         this.context = context;
@@ -34,6 +41,7 @@ public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.
         String patient = patients.get(position);
         holder.patient.setText(patient);
         holder.itemView.setSelected(selectedPos == position);
+        checkStateListener.onItemCheckStateChanged(selectedPos);
     }
 
 

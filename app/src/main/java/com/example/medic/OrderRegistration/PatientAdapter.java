@@ -1,11 +1,13 @@
 package com.example.medic.OrderRegistration;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +51,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
         private TextView who_analysis;
         private ImageButton delete;
         private RecyclerView recycler_view_analysis;
+        LinearLayout linearlayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -56,6 +59,8 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
             who_analysis = itemView.findViewById(R.id.who_analysis);
             delete = itemView.findViewById(R.id.delete);
             recycler_view_analysis = itemView.findViewById(R.id.recycler_view_analysis);
+            linearlayout = itemView.findViewById(R.id.linearlayout);
+
             delete.setVisibility(View.GONE);
             recycler_view_analysis.setVisibility(View.GONE);
 
@@ -72,10 +77,28 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                     Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                    RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
                    PatientCaseAdapter adapter = new PatientCaseAdapter(patients, context);
-                   recycle_view_patient.setAdapter(adapter);
-                  adapter.notifyDataSetChanged();
-                  button_add_patient.setEnabled(true);
+                   adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
+                       @Override
+                       public void onItemCheckStateChanged(int selectedPos) {
+                           if(selectedPos!= RecyclerView.NO_POSITION){
+                               button_add_patient.setEnabled(true);
+                           }else{
+                               button_add_patient.setEnabled(false);
+                           }
                        }
+                   });
+                   recycle_view_patient.setAdapter(adapter);
+                   dialog.findViewById(R.id.button_add_patient).setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           dialog.dismiss();
+                           delete.setVisibility(View.VISIBLE);
+                           recycler_view_analysis.setVisibility(View.VISIBLE);
+                           linearlayout.setBackground(context.getDrawable(R.drawable.patient_analysis));
+                           who_analysis.setEnabled(false);
+                       }
+                   });
+                }
             });
         }
     }

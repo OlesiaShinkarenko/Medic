@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -22,6 +23,7 @@ public class OrderRegistrationActivity extends AppCompatActivity {
     EditText edit_text_address, edit_text_datetime;
     RecyclerView who_analysis;
     BottomSheetDialog dialog;
+    Button add_patient;
     List<String> patients;
     List <String> timeList;
     @Override
@@ -33,6 +35,7 @@ public class OrderRegistrationActivity extends AppCompatActivity {
         edit_text_address = findViewById(R.id.edit_text_address);
         edit_text_datetime = findViewById(R.id.edit_text_datetime);
         who_analysis = findViewById(R.id.who_analysis);
+        add_patient = findViewById(R.id.add_patient);
 
         timeList = new ArrayList<>();
 
@@ -92,5 +95,28 @@ public class OrderRegistrationActivity extends AppCompatActivity {
 
         PatientAdapter patientAdapter = new PatientAdapter(patients,this);
         who_analysis.setAdapter(patientAdapter);
+
+        add_patient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog = new BottomSheetDialog(OrderRegistrationActivity.this);
+                dialog.setContentView(R.layout.add_patient);
+                dialog.show();
+                Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
+                RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
+                PatientCaseAdapter adapter = new PatientCaseAdapter(patients, OrderRegistrationActivity.this);
+                adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
+                    @Override
+                    public void onItemCheckStateChanged(int selectedPos) {
+                        if(selectedPos!= RecyclerView.NO_POSITION){
+                            button_add_patient.setEnabled(true);
+                        }else{
+                            button_add_patient.setEnabled(false);
+                        }
+                    }
+                });
+                recycle_view_patient.setAdapter(adapter);
+            }
+        });
     }
 }
