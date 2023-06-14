@@ -4,18 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,7 +21,7 @@ import com.example.medic.BasketActivity.BasketActivity;
 import com.example.medic.R;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
-import com.google.android.material.appbar.AppBarLayout;
+import com.example.medic.common.CategoriesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

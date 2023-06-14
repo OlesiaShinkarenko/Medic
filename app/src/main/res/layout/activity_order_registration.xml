@@ -85,16 +85,17 @@
         app:layout_constraintLeft_toLeftOf="@id/edit_text_datetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-    <EditText
+    <androidx.recyclerview.widget.RecyclerView
         android:textColor="@color/black"
         android:textSize="16sp"
         android:drawableRight="@drawable/drop_down"
-        android:background="@drawable/edittext_style"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:drawablePadding="12dp"
         android:drawableLeft="@drawable/male_icon_card"
-        android:id="@+id/edittext_who_analysis"
+        android:id="@+id/who_analysis"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/add_patient"
         app:layout_constraintTop_toBottomOf="@id/textview_who"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -107,7 +108,7 @@
         android:gravity="center"
         android:textSize="15sp"
         android:textColor="@color/button_true_enabled"
-        app:layout_constraintTop_toBottomOf="@id/edittext_who_analysis"
+        app:layout_constraintTop_toBottomOf="@id/who_analysis"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

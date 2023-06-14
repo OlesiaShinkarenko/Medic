@@ -1,4 +1,4 @@
-package com.example.medic.AnalysisFragment;
+package com.example.medic.common;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -48,7 +48,6 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             textView = itemView.findViewById(R.id.category);
             textView.setOnClickListener(this::onClick);
         }

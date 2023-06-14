@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.example.medic.AnalysisFragment.CategoriesAdapter;
+import com.example.medic.common.CategoriesAdapter;
 import com.example.medic.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -20,7 +20,9 @@ public class OrderRegistrationActivity extends AppCompatActivity {
 
     ImageButton btn_back;
     EditText edit_text_address, edit_text_datetime;
+    RecyclerView who_analysis;
     BottomSheetDialog dialog;
+    List<String> patients;
     List <String> timeList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class OrderRegistrationActivity extends AppCompatActivity {
         btn_back = findViewById(R.id.btn_back);
         edit_text_address = findViewById(R.id.edit_text_address);
         edit_text_datetime = findViewById(R.id.edit_text_datetime);
+        who_analysis = findViewById(R.id.who_analysis);
 
         timeList = new ArrayList<>();
 
@@ -40,6 +43,10 @@ public class OrderRegistrationActivity extends AppCompatActivity {
         timeList.add("15:00");
         timeList.add("16:00");
         timeList.add("17:00");
+
+
+        patients = new ArrayList<>();
+        patients.add("kglfkg");
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,5 +89,8 @@ public class OrderRegistrationActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        PatientAdapter patientAdapter = new PatientAdapter(patients,this);
+        who_analysis.setAdapter(patientAdapter);
     }
 }
