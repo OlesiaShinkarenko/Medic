@@ -1,7 +1,5 @@
 package com.example.medic.Registration;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +9,9 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
@@ -21,6 +22,8 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button buttonNext;
     private EditText editText_email;
 
+    private String emailPattern = "[a-z0-9._-]+@[a-z0-9._-]+\\.+[a-z]+";
+    private String email;
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
 
 
@@ -43,25 +46,32 @@ public class RegistrationActivity extends AppCompatActivity {
         editText_email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                buttonNext.setEnabled(true);
+                if(s.length()!=0){
+                    buttonNext.setEnabled(true);
+                }else{
+                    buttonNext.setEnabled(false);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(RegistrationActivity.this, VerificationActivity.class);
-                i.putExtra("email",editText_email.getText().toString());
-                startActivity(i);
+                email = editText_email.getText().toString();
+                if(email.matches(emailPattern)){
+                    Intent i = new Intent(RegistrationActivity.this, VerificationActivity.class);
+                    i.putExtra("email",editText_email.getText().toString());
+                    startActivity(i);
+                }else{
+                    Toast.makeText(RegistrationActivity.this, "Email-адрес некорректный!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

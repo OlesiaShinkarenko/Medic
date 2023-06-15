@@ -28,7 +28,10 @@ public class OnBoardActivity extends AppCompatActivity {
     private  List<OnboardingItem> onboardingItems = new ArrayList<>();
     private TextView skip;
     private Intent i;
-    private static final String MY_SETTINGS = "my_settings_OnBoard";
+    private  SharedPreferences.Editor e;
+    private SharedPreferences sp;
+    private boolean hasVisited;
+    private static final String MY_SETTINGS_ONBOARD = "my_settings_OnBoard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +39,12 @@ public class OnBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboard);
 
-        SharedPreferences sp = getSharedPreferences(MY_SETTINGS,
-                Context.MODE_PRIVATE);
+        sp = getSharedPreferences(MY_SETTINGS_ONBOARD, Context.MODE_PRIVATE);
 
-        boolean hasVisited = sp.getBoolean("hasVisited", false);
+        hasVisited = sp.getBoolean("hasVisited", false);
 
         if (!hasVisited) {
-            SharedPreferences.Editor e = sp.edit();
+            e = sp.edit();
             e.putBoolean("hasVisited", true);
             e.commit();
         }

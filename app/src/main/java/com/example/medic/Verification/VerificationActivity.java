@@ -1,31 +1,22 @@
 package com.example.medic.Verification;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.medic.CreatePassword.CreatePasswordActivity;
 import com.example.medic.R;
-import com.example.medic.RetrofitClient;
 
-import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class VerificationActivity extends AppCompatActivity {
 
@@ -33,11 +24,8 @@ public class VerificationActivity extends AppCompatActivity {
     EditText number1,number2, number3,number4;
     TextView return_code;
 
-
-    String code_from_text = "";
+    String code_from_text = "", email, randomCode;
     CountDownTimer count;
-    String email;
-    String randomCode;
 
 
 
@@ -55,20 +43,6 @@ public class VerificationActivity extends AppCompatActivity {
 
         email = getIntent().getStringExtra("email");
         New_code();
-
-        RetrofitClient.getRetrofitClient().sendEmail(email).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()&&response!=null){
-                    Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(VerificationActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,8 +141,20 @@ public class VerificationActivity extends AppCompatActivity {
         int rn_number = random.nextInt(diff+1);
         rn_number+=min;
         randomCode = String.valueOf(rn_number);
-        Log.i("rand", randomCode);
-
+        EmailSend emailSend = new EmailSend();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    emailSend.setBody(randomCode);
+                    emailSend.setSubject("Code");
+                    emailSend.setTo(email);
+                    emailSend.send();
+                } catch (Exception e) {
+                    Toast.makeText(VerificationActivity.this, e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).start();
         count = new CountDownTimer(60000, 1000){
 
             @Override
@@ -185,7 +171,5 @@ public class VerificationActivity extends AppCompatActivity {
             }
         }.start();
     }
-
-
 
 }
