@@ -1,7 +1,5 @@
 package com.example.medic.CreateCard;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
@@ -76,8 +76,6 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
 
         ArrayAdapter<String> adapter = new ArrayAdapter(this, R.layout.spinner_item, list);
         spinner_gender.setAdapter(adapter);
-
-
 
     }
 

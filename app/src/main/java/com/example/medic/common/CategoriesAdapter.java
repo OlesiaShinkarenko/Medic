@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medic.AnalysisFragment.Categories;
 import com.example.medic.R;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
 
  private Context context;
     private int selectedPos = RecyclerView.NO_POSITION;
-    private List<String> categories;
+    private List<Categories> categories;
 
-    public CategoriesAdapter(List<String> categories, Context context) {
+    public CategoriesAdapter(List<Categories> categories, Context context) {
         this.context = context;
         this.categories = categories;
     }
@@ -32,7 +33,7 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textView.setText(categories.get(position));
+        holder.textView.setText(categories.get(position).getName());
         holder.itemView.setSelected(selectedPos == position);
     }
 

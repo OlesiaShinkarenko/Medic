@@ -3,12 +3,7 @@ package com.example.medic.AnalysisFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.core.widget.NestedScrollView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +12,25 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.medic.BasketActivity.BasketActivity;
 import com.example.medic.R;
+import com.example.medic.common.RetrofitClient;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
+import com.example.medic.common.AnalysisResult;
 import com.example.medic.common.CategoriesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AnalysisFragment extends Fragment   {
@@ -35,12 +41,13 @@ public class AnalysisFragment extends Fragment   {
     RelativeLayout basket_relativelayout;
 
     SwipeRefreshLayout swipe_refresh_layout;
-    List<String> categories;
+    List<Categories> categories;
     List<Analysis> analyses;
     LinearLayout in_basket;
     EditText search_analysis;
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
     DiscountAdapter adapter;
+    AnalysisAdapter analysisAdapter;
     TextView discount_and_news, catalog_analysis;
 
     private Context context;
@@ -66,18 +73,10 @@ public class AnalysisFragment extends Fragment   {
         in_basket = view.findViewById(R.id.in_basket);
 
         discountAndNews = new ArrayList<>();
-        categories = new ArrayList<>();
-        analyses = new ArrayList<>();
 
         adapter = new DiscountAdapter(discountAndNews,context);
         recycle_view_banners.setAdapter(adapter);
 
-
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(categories, context);
-        recycle_view_catalog_name.setAdapter(categoriesAdapter);
-
-        AnalysisAdapter analysisAdapter = new AnalysisAdapter(analyses,context);
-        recycle_view_catalog.setAdapter(analysisAdapter);
         search_analysis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,9 +89,6 @@ public class AnalysisFragment extends Fragment   {
             public void onRefresh() {
                 setData();
                 swipe_refresh_layout.setRefreshing(false);
-                adapter.notifyDataSetChanged();
-                categoriesAdapter.notifyDataSetChanged();
-                analysisAdapter.notifyDataSetChanged();
             }
         });
         setData();
@@ -130,41 +126,42 @@ public class AnalysisFragment extends Fragment   {
 
 
     private void setData() {
-       /* RetrofitClient.getRetrofitClient().getDiscounts().enqueue(new Callback<List<DiscountAndNews>>() {
-            @Override
-            public void onResponse(Call<List<DiscountAndNews>> call, Response<List<DiscountAndNews>> response) {
-                if(response.isSuccessful()&&response.body()!=null){
-                    discountAndNews = response.body();
-                    adaptedsadr.notifyDataSetChanged();
-                }
-            }
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               try {
+                   RetrofitClient.getRetrofitClient().getAnalyses().enqueue(new Callback<AnalysisResult>() {
+                       @Override
+                       public void onResponse(Call<AnalysisResult> call, Response<AnalysisResult> response) {
+                               analyses = response.body().getAnalyses();
+                           analysisAdapter = new AnalysisAdapter(analyses,context);
+                           recycle_view_catalog.setAdapter(analysisAdapter);
+                           Log.d("true","true");
+                           Log.i("d",analyses.get(0).getBio().toString());
+                       }
+                       @Override
+                       public void onFailure(Call<AnalysisResult> call, Throwable t) {
+                           Log.d("false",t.toString());
+                       }
+                   });
 
-            @Override
-            public void onFailure(Call<List<DiscountAndNews>> call, Throwable t) {
+                   RetrofitClient.getRetrofitClient().getCategories().enqueue(new Callback<CategoriesResult>() {
+                       @Override
+                       public void onResponse(Call<CategoriesResult> call, Response<CategoriesResult> response) {
+                           categories = response.body().getCategories();
+                           CategoriesAdapter categoriesAdapter = new CategoriesAdapter(categories, context);
+                           recycle_view_catalog_name.setAdapter(categoriesAdapter);
+                       }
 
-            }
-        });
-        */
-        discountAndNews.add(new DiscountAndNews(1,"ff","fgfg","fgfg","fgfg"));
-        discountAndNews.add(new DiscountAndNews(2,"gfddgs","fdg","34","df"));
-        categories.add("kgoihjg");
-        categories.add("ghfgh");
-        categories.add("rewr");
-        analyses.add(new Analysis("fgfg","fgfg","fgfdgf"));
-            analyses.add(new Analysis("wq3re23","rfff","dhkulk"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
+                       @Override
+                       public void onFailure(Call<CategoriesResult> call, Throwable t) {
+
+                       }
+                   });
+               }catch (Exception e){
+                   Log.d("not","not");
+               }
+           }
+       }).start();
     }
-
-    @Override
-    public void onViewCreated( View view, Bundle savedInstanceState) {
-
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-
 }

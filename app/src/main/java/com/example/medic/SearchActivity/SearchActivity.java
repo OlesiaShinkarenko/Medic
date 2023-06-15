@@ -1,17 +1,15 @@
 package com.example.medic.SearchActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
@@ -42,14 +40,7 @@ public class SearchActivity extends AppCompatActivity {
         search_edit_text = findViewById(R.id.search_edit_text);
 
         analyses = new ArrayList<>();
-        analyses.add(new Analysis("fgfg","fgfg","fgfdgf"));
-        analyses.add(new Analysis("wq3re23","rfff","dhkulk"));
-        analyses.add(new Analysis("345 аолрпорпо","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
+
 
 
 

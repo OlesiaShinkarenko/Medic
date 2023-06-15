@@ -24,7 +24,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private String emailPattern = "[a-z0-9._-]+@[a-z0-9._-]+\\.+[a-z]+";
     private String email;
+    private SharedPreferences sp, sp2;
+
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
+    private static final String MY_SETTINGS_EMAIL = "my_settings_email";
+
+    public static final String PREFERENCES_EMAIL = "Email";
 
 
     @Override
@@ -32,8 +37,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-
-        SharedPreferences sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+        sp= getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
         boolean hasSkipped = sp.getBoolean("hasSkipped",true);
         if(!hasSkipped){
             Intent i = new Intent(RegistrationActivity.this, MainScreenActivity.class);
@@ -67,7 +71,10 @@ public class RegistrationActivity extends AppCompatActivity {
                 email = editText_email.getText().toString();
                 if(email.matches(emailPattern)){
                     Intent i = new Intent(RegistrationActivity.this, VerificationActivity.class);
-                    i.putExtra("email",editText_email.getText().toString());
+                    sp2 = getSharedPreferences(MY_SETTINGS_EMAIL,Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp2.edit();
+                    editor.putString(PREFERENCES_EMAIL, email);
+                    editor.commit();
                     startActivity(i);
                 }else{
                     Toast.makeText(RegistrationActivity.this, "Email-адрес некорректный!", Toast.LENGTH_SHORT).show();

@@ -1,13 +1,13 @@
 package com.example.medic.BasketActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.OrderRegistration.OrderRegistrationActivity;
 import com.example.medic.R;
@@ -36,9 +36,7 @@ public class BasketActivity extends AppCompatActivity {
 
         BasketAnalysisAdapter adapter = new BasketAnalysisAdapter(analyses, this);
         recycler_view_basket.setAdapter(adapter);
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
-        analyses.add(new Analysis("345","fgffdg45g","fgfdfdsg"));
+
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override

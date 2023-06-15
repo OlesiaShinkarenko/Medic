@@ -1,8 +1,6 @@
 package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +20,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
     private LayoutInflater inflater;
     private List<Analysis> analyses;
     private Context context;
+    private Integer selectedPos;
 
     public AnalysisAdapter(List<Analysis> analyses, Context context) {
         this.inflater = LayoutInflater.from(context);
@@ -66,6 +65,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
         @Override
         public void onClick(View v) {
             if(!button_add.isSelected()){
+                selectedPos= getAdapterPosition();
                 dialog = new BottomSheetDialog(context);
                 dialog.setContentView(R.layout.card_product);
                 dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -83,6 +83,20 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
 
                     }
                 });
+                TextView name_analysis = dialog.findViewById(R.id.name_analysis);
+                name_analysis.setText(analyses.get(selectedPos).getName());
+                TextView description_analysis = dialog.findViewById(R.id.description_analysis);
+                description_analysis.setText(analyses.get(selectedPos).getDescription());
+                TextView preparation_analysis = dialog.findViewById(R.id.preparation_analysis);
+                preparation_analysis.setText(analyses.get(selectedPos).getPreparation());
+                TextView result_analysis = dialog.findViewById(R.id.result_analysis);
+                result_analysis.setText(analyses.get(selectedPos).getTime_result());
+                TextView bio_analysis = dialog.findViewById(R.id.bio_analysis);
+                bio_analysis.setText(analyses.get(selectedPos).getBio());
+                Button button_add = dialog.findViewById(R.id.button_add);
+                String javaFormatString  =  context.getString(R.string.add_with);
+                String  substitutedString  =  String.format(javaFormatString,analyses.get(selectedPos).getPrice());
+                button_add.setText(substitutedString);
                 dialog.show();
             }else {
                 button_add.setSelected(false);

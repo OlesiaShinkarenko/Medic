@@ -1,19 +1,34 @@
 package com.example.medic.common;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Analysis {
+    @SerializedName("id")
     private int id;
+    @SerializedName("name")
     private String name;
+    @SerializedName("description")
     private String description;
+    @SerializedName("price")
     private String price;
+    @SerializedName("category")
     private String category;
+    @SerializedName("time_result")
     private String time_result;
+    @SerializedName("preparation")
     private String preparation;
+    @SerializedName("bio")
     private String bio;
 
-    public Analysis(String name, String price, String time_result) {
+    public Analysis(int id, String name, String description, String price, String category, String time_result, String preparation, String bio) {
+        this.id = id;
         this.name = name;
+        this.description = description;
         this.price = price;
+        this.category = category;
         this.time_result = time_result;
+        this.preparation = preparation;
+        this.bio = bio;
     }
 
     public int getId() {

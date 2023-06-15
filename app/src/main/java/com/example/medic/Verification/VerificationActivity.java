@@ -1,10 +1,13 @@
 package com.example.medic.Verification;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +26,10 @@ public class VerificationActivity extends AppCompatActivity {
     ImageButton btn_back;
     EditText number1,number2, number3,number4;
     TextView return_code;
+    private static final String MY_SETTINGS_EMAIL = "my_settings_email";
+
+    private static final String PREFERENCES_EMAIL = "Email";
+    SharedPreferences sp;
 
     String code_from_text = "", email, randomCode;
     CountDownTimer count;
@@ -41,7 +48,10 @@ public class VerificationActivity extends AppCompatActivity {
         number4 = findViewById(R.id.number4);
         return_code = findViewById(R.id.return_code);
 
-        email = getIntent().getStringExtra("email");
+        sp = getSharedPreferences(MY_SETTINGS_EMAIL, Context.MODE_PRIVATE);
+
+        email = sp.getString(PREFERENCES_EMAIL,"");
+        Log.d("email",email);
         New_code();
 
         btn_back.setOnClickListener(new View.OnClickListener() {

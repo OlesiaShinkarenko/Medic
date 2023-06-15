@@ -1,20 +1,27 @@
 package com.example.medic.CreatePassword;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.medic.CreateCard.CreateCardActivity;
 import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
+import com.example.medic.common.RetrofitClient;
+import com.example.medic.common.User;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CreatePasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,7 +35,11 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
 
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
     private static final String MY_SETTINGS2 = "my_settings_CreateCard";
-    SharedPreferences sp,sp2;
+    private static final String SETTINGS_PASSWORD = "settings_password";
+    private static final String MY_SETTINGS_EMAIL = "my_settings_email";
+    public static final String PREFERENCES_EMAIL = "Email";
+    public static final String PREFERENCES_PASSWORD = "password";
+    SharedPreferences sp,sp2,sp3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,8 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
 
         sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
         sp2 = getSharedPreferences(MY_SETTINGS2, Context.MODE_PRIVATE);
+        sp3 = getSharedPreferences(SETTINGS_PASSWORD, Context.MODE_PRIVATE);
+
 
         skip = findViewById(R.id.skip);
         indicator1 = findViewById(R.id.indicator1);
@@ -114,6 +127,31 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
             SharedPreferences.Editor r2 = sp2.edit();
             r2.putBoolean("hasSkipped",false);
             r2.commit();
+            SharedPreferences.Editor r3 = sp3.edit();
+            r3.putString(PREFERENCES_PASSWORD,password);
+            r3.commit();
+            sp3 = getSharedPreferences(MY_SETTINGS_EMAIL,Context.MODE_PRIVATE);
+            String email = sp3.getString(PREFERENCES_EMAIL, "");
+            User user = new User(email, password);
+            new Thread(new Runnable() {
+                public void run() {
+                    try{
+                        RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<User>() {
+                            @Override
+                            public void onResponse(Call<User> call, Response<User> response) {
+                                Log.d("true","true");
+                            }
+
+                            @Override
+                            public void onFailure(Call<User> call, Throwable t) {
+                                Log.d("false",t.toString());
+                            }
+                        });
+                    }
+                    catch (Exception ex){
+                        Log.d("not","not");
+                    }
+            }}).start();
             Intent i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
             startActivity(i);
             finish();
