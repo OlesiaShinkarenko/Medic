@@ -3,8 +3,6 @@ package com.example.medic.AnalysisFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,19 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.medic.BasketActivity.BasketActivity;
-import com.example.medic.OrderRegistration.PatientCaseAdapter;
 import com.example.medic.R;
-import com.example.medic.common.RetrofitClient;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
 import com.example.medic.common.AnalysisResult;
+import com.example.medic.common.RetrofitClient;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,7 +43,8 @@ public class AnalysisFragment extends Fragment   {
 
     SwipeRefreshLayout swipe_refresh_layout;
     List<Categories> categories;
-    List<Analysis> analyses;
+    static List<Analysis> analyses= new ArrayList<>();
+    static List<Analysis> fullanalyses= new ArrayList<>();
     LinearLayout in_basket;
     EditText search_analysis;
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
@@ -88,7 +85,7 @@ public class AnalysisFragment extends Fragment   {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SearchActivity.class);
-                i.putExtra("analysis", (Serializable) analyses);
+                i.putExtra("analysis", (Serializable) fullanalyses);
                 startActivity(i);
             }
         });
@@ -125,6 +122,7 @@ public class AnalysisFragment extends Fragment   {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context, BasketActivity.class);
+                i.putExtra("analysis",(Serializable) fullanalyses);
                 startActivity(i);
             }
         });
@@ -141,6 +139,8 @@ public class AnalysisFragment extends Fragment   {
                        @Override
                        public void onResponse(Call<AnalysisResult> call, Response<AnalysisResult> response) {
                                analyses = response.body().getAnalyses();
+                               fullanalyses = new ArrayList<>();
+                           fullanalyses.addAll(analyses);
                            analysisAdapter = new AnalysisAdapter(analyses,context);
                            analysisAdapter.setOnItemsCheckStateListener(new AnalysisAdapter.OnItemsCheckStateListener(){
 
@@ -172,14 +172,18 @@ public class AnalysisFragment extends Fragment   {
                                @Override
                                public void onItemCheckStateChanged(int category) {
                                    if (category != -1 && analyses != null) {
+
+                                       analyses.clear();
+                                       analyses.addAll(fullanalyses);
                                        analysis_in_categories = new ArrayList<>();
                                        for (Analysis analysis : analyses) {
                                            if (analysis.getCategory() == category) {
                                                analysis_in_categories.add(analysis);
                                            }
                                        }
-                                       analysisAdapter = new AnalysisAdapter(analysis_in_categories, context);
-                                       recycle_view_catalog.setAdapter(analysisAdapter);
+                                       analyses.clear();
+                                       analyses.addAll(analysis_in_categories);
+                                    analysisAdapter.notifyDataSetChanged();
                                    }
                                }
                            });

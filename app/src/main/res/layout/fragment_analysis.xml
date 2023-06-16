@@ -87,7 +87,7 @@
                 android:id="@+id/recycle_view_catalog"
                 android:layout_width="match_parent"
                 android:layout_marginBottom="24dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
         <RelativeLayout

@@ -1,7 +1,6 @@
 package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.medic.OrderRegistration.PatientCaseAdapter;
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
+import com.example.medic.common.Order;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHolder> {
@@ -23,11 +21,10 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
     private LayoutInflater inflater;
     private List<Analysis> analyses;
     private Context context;
+
     private Integer selectedPos;
+
     AnalysisAdapter.OnItemsCheckStateListener checkStateListener;
-
-
-
 
     public interface OnItemsCheckStateListener {
         void onItemCheckStateChanged(int price_analysis);
@@ -54,7 +51,16 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
         holder.name_analysis.setText(analysis.getName());
         holder.price_analysis.setText(analysis.getPrice());
         holder.time_analysis.setText(analysis.getTime_result());
+      if (!Order.id.contains(analysis.getId())){
+            holder.button_add.setText(R.string.add_analysis);
+            holder.button_add.setSelected(false);
+        }else
+        {
+            holder.button_add.setText(R.string.delete);
+            holder.button_add.setSelected(true);
+        }
     }
+
 
     @Override
     public int getItemCount() {
@@ -78,10 +84,8 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
 
         @Override
         public void onClick(View v) {
-            if(!button_add.isSelected()){
-                Log.e(String.valueOf(analyses.size()),String.valueOf(analyses.size()));
-                selectedPos=getAdapterPosition();
-                Log.d(selectedPos.toString(),selectedPos.toString());
+            selectedPos=getAdapterPosition();;
+           if(!Order.id.contains(analyses.get(selectedPos).getId())){
                 dialog = new BottomSheetDialog(context);
                 dialog.setContentView(R.layout.card_product);
                 dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -94,6 +98,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                     @Override
                     public void onClick(View v) {
                         button_add.setText(itemView.getResources().getText(R.string.delete));
+                        Order.id.add(analyses.get(selectedPos).getId());
                         button_add.setSelected(true);
                         checkStateListener.onItemCheckStateChanged(analyses.get(selectedPos).getPrice_int());
                         dialog.dismiss();
@@ -110,16 +115,17 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                 TextView bio_analysis = dialog.findViewById(R.id.bio_analysis);
                 bio_analysis.setText(analyses.get(selectedPos).getBio());
                 Button button_add = dialog.findViewById(R.id.button_add);
+
                 String javaFormatString  =  context.getString(R.string.add_with);
-                String  substitutedString  =  String.format(javaFormatString,analyses.get(selectedPos).getPrice());
+               String  substitutedString  =  String.format(javaFormatString,analyses.get(selectedPos).getPrice());
                 button_add.setText(substitutedString);
                 dialog.show();
             }else {
+                Order.id.remove(analyses.get(selectedPos).getId());
                 checkStateListener.onItemCheckStateChanged(-analyses.get(selectedPos).getPrice_int());
                 button_add.setSelected(false);
                 button_add.setText(itemView.getResources().getText(R.string.add_analysis));
             }
-
         }
     }
 }

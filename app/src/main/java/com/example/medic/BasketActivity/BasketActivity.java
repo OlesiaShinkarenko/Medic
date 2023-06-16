@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.medic.OrderRegistration.OrderRegistrationActivity;
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
+import com.example.medic.common.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,13 @@ public class BasketActivity extends AppCompatActivity {
         icon_basket_delete = findViewById(R.id.icon_basket_delete);
         recycler_view_basket = findViewById(R.id.recycler_view_basket);
         transition = findViewById(R.id.transition);
+
+        List<Analysis> full = (ArrayList)getIntent().getSerializableExtra("analysis");
+        for (Analysis analysis: full){
+            if(Order.id.contains(analysis.getId())){
+                analyses.add(analysis);
+            }
+        }
 
         BasketAnalysisAdapter adapter = new BasketAnalysisAdapter(analyses, this);
         recycler_view_basket.setAdapter(adapter);
