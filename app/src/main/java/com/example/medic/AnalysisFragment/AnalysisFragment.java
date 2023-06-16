@@ -18,12 +18,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.medic.BasketActivity.BasketActivity;
+import com.example.medic.OrderRegistration.PatientCaseAdapter;
 import com.example.medic.R;
 import com.example.medic.common.RetrofitClient;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
 import com.example.medic.common.AnalysisResult;
-import com.example.medic.common.CategoriesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,11 @@ import retrofit2.Response;
 public class AnalysisFragment extends Fragment   {
 
     List<DiscountAndNews> discountAndNews ;
+    List<Analysis> analysis_in_categories;
 
     NestedScrollView scrollview;
     RelativeLayout basket_relativelayout;
+    CategoriesAdapter categoriesAdapter;
 
     SwipeRefreshLayout swipe_refresh_layout;
     List<Categories> categories;
@@ -136,12 +138,9 @@ public class AnalysisFragment extends Fragment   {
                                analyses = response.body().getAnalyses();
                            analysisAdapter = new AnalysisAdapter(analyses,context);
                            recycle_view_catalog.setAdapter(analysisAdapter);
-                           Log.d("true","true");
-                           Log.i("d",analyses.get(0).getBio().toString());
                        }
                        @Override
                        public void onFailure(Call<AnalysisResult> call, Throwable t) {
-                           Log.d("false",t.toString());
                        }
                    });
 
@@ -149,7 +148,24 @@ public class AnalysisFragment extends Fragment   {
                        @Override
                        public void onResponse(Call<CategoriesResult> call, Response<CategoriesResult> response) {
                            categories = response.body().getCategories();
-                           CategoriesAdapter categoriesAdapter = new CategoriesAdapter(categories, context);
+                           categoriesAdapter = new CategoriesAdapter(categories, context);
+                           categoriesAdapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
+                               @Override
+                               public void onItemCheckStateChanged(int category) {
+                                   if (category!=-1&&analyses!=null){
+                                       analysis_in_categories = new ArrayList<>();
+                                       for (Analysis analysis: analyses){
+                                           if (analysis.getCategory() == category){
+                                               analysis_in_categories.add(analysis);
+                                           }
+                                       }
+                                       Log.d("cat",String.valueOf(category));
+                                       analysisAdapter = new AnalysisAdapter(analysis_in_categories,context);
+                                       recycle_view_catalog.setAdapter(analysisAdapter);
+                                   }
+                               }
+                           });
+
                            recycle_view_catalog_name.setAdapter(categoriesAdapter);
                        }
 
@@ -159,7 +175,6 @@ public class AnalysisFragment extends Fragment   {
                        }
                    });
                }catch (Exception e){
-                   Log.d("not","not");
                }
            }
        }).start();

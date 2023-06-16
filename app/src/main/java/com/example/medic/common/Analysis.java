@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Analysis {
     @SerializedName("id")
-    private int id;
+    private Integer id;
     @SerializedName("name")
     private String name;
     @SerializedName("description")
@@ -12,7 +12,7 @@ public class Analysis {
     @SerializedName("price")
     private String price;
     @SerializedName("category")
-    private String category;
+    private Integer category;
     @SerializedName("time_result")
     private String time_result;
     @SerializedName("preparation")
@@ -20,7 +20,7 @@ public class Analysis {
     @SerializedName("bio")
     private String bio;
 
-    public Analysis(int id, String name, String description, String price, String category, String time_result, String preparation, String bio) {
+    public Analysis(Integer id, String name, String description, String price, Integer category, String time_result, String preparation, String bio) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -31,11 +31,11 @@ public class Analysis {
         this.bio = bio;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -63,11 +63,11 @@ public class Analysis {
         this.price = price;
     }
 
-    public String getCategory() {
+    public Integer getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Integer category) {
         this.category = category;
     }
 

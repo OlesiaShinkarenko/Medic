@@ -34,7 +34,7 @@
         android:id="@+id/scrollview"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/basket_relativelayout"
         android:layout_height="0dp">
         <LinearLayout
             android:id="@+id/linearlayout"
@@ -91,6 +91,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/basket_relativelayout"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -132,6 +133,5 @@
                   android:layout_height="wrap_content"/>
           </LinearLayout>
         </RelativeLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

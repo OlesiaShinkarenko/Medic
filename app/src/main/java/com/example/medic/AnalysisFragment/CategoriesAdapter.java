@@ -1,6 +1,7 @@
-package com.example.medic.common;
+package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.medic.AnalysisFragment.Categories;
+import com.example.medic.OrderRegistration.PatientCaseAdapter;
 import com.example.medic.R;
 
 import java.util.List;
@@ -19,11 +20,20 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
  private Context context;
     private int selectedPos = RecyclerView.NO_POSITION;
     private List<Categories> categories;
+    PatientCaseAdapter.OnItemsCheckStateListener checkStateListener;
+
+    public interface OnItemsCheckStateListener {
+        void onItemCheckStateChanged(int selectedPos);
+    }
+    public void setOnItemsCheckStateListener(PatientCaseAdapter.OnItemsCheckStateListener checkStateListener) {
+        this.checkStateListener = checkStateListener;
+    }
 
     public CategoriesAdapter(List<Categories> categories, Context context) {
         this.context = context;
         this.categories = categories;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
@@ -33,7 +43,12 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.textView.setText(categories.get(position).getName());
+        Categories category =  categories.get(position);
+        holder.textView.setText(category.getName());
+        if(selectedPos==position){
+            checkStateListener.onItemCheckStateChanged(categories.get(position).getId());
+        }
+
         holder.itemView.setSelected(selectedPos == position);
     }
 
@@ -58,6 +73,7 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
             notifyItemChanged(selectedPos);
             selectedPos = getLayoutPosition();
             notifyItemChanged(selectedPos);
+
         }
     }
 }
