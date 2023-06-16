@@ -20,12 +20,12 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
  private Context context;
     private int selectedPos = RecyclerView.NO_POSITION;
     private List<Categories> categories;
-    PatientCaseAdapter.OnItemsCheckStateListener checkStateListener;
+    CategoriesAdapter.OnItemsCheckStateListener checkStateListener;
 
     public interface OnItemsCheckStateListener {
-        void onItemCheckStateChanged(int selectedPos);
+        void onItemCheckStateChanged(int category);
     }
-    public void setOnItemsCheckStateListener(PatientCaseAdapter.OnItemsCheckStateListener checkStateListener) {
+    public void setOnItemsCheckStateListener(CategoriesAdapter.OnItemsCheckStateListener checkStateListener) {
         this.checkStateListener = checkStateListener;
     }
 
@@ -48,7 +48,6 @@ public class CategoriesAdapter  extends RecyclerView.Adapter<CategoriesAdapter.V
         if(selectedPos==position){
             checkStateListener.onItemCheckStateChanged(categories.get(position).getId());
         }
-
         holder.itemView.setSelected(selectedPos == position);
     }
 

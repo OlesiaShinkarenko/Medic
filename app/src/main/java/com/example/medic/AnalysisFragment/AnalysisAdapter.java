@@ -1,6 +1,7 @@
 package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medic.OrderRegistration.PatientCaseAdapter;
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHolder> {
@@ -21,6 +24,17 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
     private List<Analysis> analyses;
     private Context context;
     private Integer selectedPos;
+    AnalysisAdapter.OnItemsCheckStateListener checkStateListener;
+
+
+
+
+    public interface OnItemsCheckStateListener {
+        void onItemCheckStateChanged(int price_analysis);
+    }
+    public void setOnItemsCheckStateListener(AnalysisAdapter.OnItemsCheckStateListener checkStateListener) {
+        this.checkStateListener = checkStateListener;
+    }
 
     public AnalysisAdapter(List<Analysis> analyses, Context context) {
         this.inflater = LayoutInflater.from(context);
@@ -65,7 +79,9 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
         @Override
         public void onClick(View v) {
             if(!button_add.isSelected()){
-                selectedPos= getAdapterPosition();
+                Log.e(String.valueOf(analyses.size()),String.valueOf(analyses.size()));
+                selectedPos=getAdapterPosition();
+                Log.d(selectedPos.toString(),selectedPos.toString());
                 dialog = new BottomSheetDialog(context);
                 dialog.setContentView(R.layout.card_product);
                 dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -79,8 +95,8 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                     public void onClick(View v) {
                         button_add.setText(itemView.getResources().getText(R.string.delete));
                         button_add.setSelected(true);
+                        checkStateListener.onItemCheckStateChanged(analyses.get(selectedPos).getPrice_int());
                         dialog.dismiss();
-
                     }
                 });
                 TextView name_analysis = dialog.findViewById(R.id.name_analysis);
@@ -99,6 +115,7 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                 button_add.setText(substitutedString);
                 dialog.show();
             }else {
+                checkStateListener.onItemCheckStateChanged(-analyses.get(selectedPos).getPrice_int());
                 button_add.setSelected(false);
                 button_add.setText(itemView.getResources().getText(R.string.add_analysis));
             }

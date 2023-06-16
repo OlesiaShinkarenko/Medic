@@ -1,8 +1,13 @@
 package com.example.medic.common;
 
+import android.content.Context;
+
+import com.example.medic.R;
 import com.google.gson.annotations.SerializedName;
 
-public class Analysis {
+import java.io.Serializable;
+
+public class Analysis implements Serializable {
     @SerializedName("id")
     private Integer id;
     @SerializedName("name")
@@ -19,6 +24,7 @@ public class Analysis {
     private String preparation;
     @SerializedName("bio")
     private String bio;
+
 
     public Analysis(Integer id, String name, String description, String price, Integer category, String time_result, String preparation, String bio) {
         this.id = id;
@@ -56,7 +62,16 @@ public class Analysis {
     }
 
     public String getPrice() {
-        return price;
+        double priceDouble = Double.parseDouble(price);
+        int priceInt = (int) priceDouble;
+        String javaFormatString  = "%d ₽";
+        String  substitutedString  =  String.format(javaFormatString, priceInt);
+        return substitutedString;
+    }
+    public int getPrice_int() {
+        double priceDouble = Double.parseDouble(price);
+        int priceInt = (int) priceDouble;
+        return priceInt;
     }
 
     public void setPrice(String price) {

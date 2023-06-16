@@ -56,22 +56,12 @@
     <string name="search_analysis">Искать анализы</string>
 
     <!--analysis -->
-    <string name="name_analysis">ПЦР-тест на определение РНК коронавируса стандартный</string>
-    <string name="time_analysis">2 дня</string>
-    <string name="cost_analysis">1800 ₽</string>
+
     <string name="add_analysis">Добавить</string>
     <string name="discount_and_news">Акции и новости</string>
     <string name="catalog_analysis">Каталог анализов</string>
     <string name="delete">Убрать</string>
 
-    <!--banners -->
-    <string name="name_banners">Чек-ап для\nмужчин</string>
-    <string name="subscription_banners">9 исследований</string>
-    <string name="cost_banners">8000 ₽</string>
-
-    <string name="name_banners2">Подготовка к\nвакцинации</string>
-    <string name="subscription_banners2">Комплексное обследование перед вакцинацией</string>
-    <string name="cost_banners2">4000 ₽</string>
 
     <!-- splash screen -->
     <string name="pref_previously_started">true</string>

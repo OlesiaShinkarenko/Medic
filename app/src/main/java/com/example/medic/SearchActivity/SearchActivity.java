@@ -39,10 +39,7 @@ public class SearchActivity extends AppCompatActivity {
 
         search_edit_text = findViewById(R.id.search_edit_text);
 
-        analyses = new ArrayList<>();
-
-
-
+        analyses = (ArrayList)getIntent().getSerializableExtra("analysis");
 
         search_edit_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -53,12 +50,15 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 filterList.clear();
-                if(s.toString().isEmpty()){
-                    SearchAnalysisAdapter adapter = new SearchAnalysisAdapter(filterList,SearchActivity.this,s.toString());
-                    search_result.setAdapter(adapter);
-                }else {
-                    Filter(s.toString());
+                if (s.length()>=3){
+                    if(s.toString().isEmpty()){
+                        SearchAnalysisAdapter adapter = new SearchAnalysisAdapter(filterList,SearchActivity.this,s.toString());
+                        search_result.setAdapter(adapter);
+                    }else {
+                        Filter(s.toString());
+                    }
                 }
+
             }
 
             @Override
@@ -71,9 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(SearchActivity.this, MainScreenActivity.class);
-                startActivity(i);
-                finish();
+                onBackPressed();
             }
         });
     }

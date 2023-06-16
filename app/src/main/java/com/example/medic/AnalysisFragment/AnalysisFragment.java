@@ -3,6 +3,7 @@ package com.example.medic.AnalysisFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
 import com.example.medic.common.AnalysisResult;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,9 +53,10 @@ public class AnalysisFragment extends Fragment   {
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
     DiscountAdapter adapter;
     AnalysisAdapter analysisAdapter;
-    TextView discount_and_news, catalog_analysis;
+    TextView discount_and_news, catalog_analysis , sum_basket;
 
     private Context context;
+    private int sum_price = 0;
 
 
     @Override
@@ -73,6 +77,7 @@ public class AnalysisFragment extends Fragment   {
         search_analysis = view.findViewById(R.id.search_analysis);
         basket_relativelayout = view.findViewById(R.id.basket_relativelayout);
         in_basket = view.findViewById(R.id.in_basket);
+        sum_basket = view.findViewById(R.id.sum_basket);
 
         discountAndNews = new ArrayList<>();
 
@@ -83,6 +88,7 @@ public class AnalysisFragment extends Fragment   {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, SearchActivity.class);
+                i.putExtra("analysis", (Serializable) analyses);
                 startActivity(i);
             }
         });
@@ -113,7 +119,6 @@ public class AnalysisFragment extends Fragment   {
             }
 
         });
-
          */
 
         in_basket.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +142,20 @@ public class AnalysisFragment extends Fragment   {
                        public void onResponse(Call<AnalysisResult> call, Response<AnalysisResult> response) {
                                analyses = response.body().getAnalyses();
                            analysisAdapter = new AnalysisAdapter(analyses,context);
+                           analysisAdapter.setOnItemsCheckStateListener(new AnalysisAdapter.OnItemsCheckStateListener(){
+
+                               @Override
+                               public void onItemCheckStateChanged(int price_analysis) {
+                                   if(price_analysis!=-1){
+                                       basket_relativelayout.setVisibility(View.VISIBLE);
+                                       sum_price+=price_analysis;
+                                       sum_basket.setText(String.valueOf(sum_price));
+                                   }
+                                   if (sum_price<=0){
+                                       basket_relativelayout.setVisibility(View.GONE);
+                                   }
+                               }
+                           });
                            recycle_view_catalog.setAdapter(analysisAdapter);
                        }
                        @Override
@@ -149,23 +168,21 @@ public class AnalysisFragment extends Fragment   {
                        public void onResponse(Call<CategoriesResult> call, Response<CategoriesResult> response) {
                            categories = response.body().getCategories();
                            categoriesAdapter = new CategoriesAdapter(categories, context);
-                           categoriesAdapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
+                           categoriesAdapter.setOnItemsCheckStateListener(new CategoriesAdapter.OnItemsCheckStateListener() {
                                @Override
                                public void onItemCheckStateChanged(int category) {
-                                   if (category!=-1&&analyses!=null){
+                                   if (category != -1 && analyses != null) {
                                        analysis_in_categories = new ArrayList<>();
-                                       for (Analysis analysis: analyses){
-                                           if (analysis.getCategory() == category){
+                                       for (Analysis analysis : analyses) {
+                                           if (analysis.getCategory() == category) {
                                                analysis_in_categories.add(analysis);
                                            }
                                        }
-                                       Log.d("cat",String.valueOf(category));
-                                       analysisAdapter = new AnalysisAdapter(analysis_in_categories,context);
+                                       analysisAdapter = new AnalysisAdapter(analysis_in_categories, context);
                                        recycle_view_catalog.setAdapter(analysisAdapter);
                                    }
                                }
                            });
-
                            recycle_view_catalog_name.setAdapter(categoriesAdapter);
                        }
 
@@ -178,5 +195,8 @@ public class AnalysisFragment extends Fragment   {
                }
            }
        }).start();
+
     }
+
+
 }

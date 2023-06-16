@@ -17,7 +17,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:id="@+id/name_analysis"
-            android:text="@string/name_analysis"
             android:layout_width="wrap_content"
             android:textAlignment="textStart"
             android:textColor="@color/black"
@@ -26,7 +25,6 @@
         <TextView
             app:layout_constraintTop_toBottomOf="@id/name_analysis"
             app:layout_constraintLeft_toLeftOf="@id/name_analysis"
-            android:text="@string/time_analysis"
             android:layout_marginTop="16dp"
             android:textColor="@color/AfternameOnBoard_color"
             android:textSize="14sp"
@@ -37,7 +35,6 @@
             android:id="@+id/price_analysis"
             app:layout_constraintTop_toBottomOf="@id/time_analysis"
             app:layout_constraintLeft_toLeftOf="@id/time_analysis"
-            android:text="@string/cost_analysis"
             android:textColor="@color/black"
             android:layout_marginTop="4dp"
             android:textSize="17sp"
