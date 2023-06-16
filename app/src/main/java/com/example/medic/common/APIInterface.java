@@ -16,4 +16,7 @@ public interface APIInterface {
 
     @GET("category/")
     Call<CategoriesResult> getCategories();
+
+    @GET("news/")
+    Call<NewsResult>getNews();
 }

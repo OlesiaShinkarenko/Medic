@@ -21,6 +21,8 @@ import com.example.medic.R;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
 import com.example.medic.common.AnalysisResult;
+import com.example.medic.common.DiscountAndNews;
+import com.example.medic.common.NewsResult;
 import com.example.medic.common.RetrofitClient;
 
 import java.io.Serializable;
@@ -75,11 +77,6 @@ public class AnalysisFragment extends Fragment   {
         basket_relativelayout = view.findViewById(R.id.basket_relativelayout);
         in_basket = view.findViewById(R.id.in_basket);
         sum_basket = view.findViewById(R.id.sum_basket);
-
-        discountAndNews = new ArrayList<>();
-
-        adapter = new DiscountAdapter(discountAndNews,context);
-        recycle_view_banners.setAdapter(adapter);
 
         search_analysis.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,6 +194,20 @@ public class AnalysisFragment extends Fragment   {
                    });
                }catch (Exception e){
                }
+
+               RetrofitClient.getRetrofitClient().getNews().enqueue(new Callback<NewsResult>() {
+                   @Override
+                   public void onResponse(Call<NewsResult> call, Response<NewsResult> response) {
+                       discountAndNews = response.body().getResults();
+                       DiscountAdapter discountAdapter = new DiscountAdapter(discountAndNews,context);
+                       recycle_view_banners.setAdapter(discountAdapter);
+                   }
+
+                   @Override
+                   public void onFailure(Call<NewsResult> call, Throwable t) {
+
+                   }
+               });
            }
        }).start();
 

@@ -1,13 +1,17 @@
-package com.example.medic.AnalysisFragment;
+package com.example.medic.common;
+
+import com.google.gson.annotations.SerializedName;
 
 public class DiscountAndNews {
-
+    @SerializedName("id")
     private Integer id;
-
+    @SerializedName("name")
     private String name;
-
+    @SerializedName("price")
     private String price;
+    @SerializedName("description")
     private String description;
+    @SerializedName("image")
     private String image;
 
     public DiscountAndNews(Integer id,String name, String description, String price, String image) {
@@ -53,7 +57,4 @@ public class DiscountAndNews {
         return price;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
-    }
 }

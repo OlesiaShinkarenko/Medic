@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
+import com.example.medic.common.DiscountAndNews;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
         holder.nameView.setText(discountAndNews1.getName());
         holder.descriptionView.setText(discountAndNews1.getDescription());
         holder.priceView.setText(discountAndNews1.getPrice());
+        Picasso.get().load(discountAndNews1.getImage()).into(holder.image_banners);
     }
 
     @Override
@@ -44,6 +47,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView nameView, descriptionView, priceView;
+        private ImageView image_banners;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,6 +55,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
             nameView = itemView.findViewById(R.id.name_banner);
             descriptionView = itemView.findViewById(R.id.description_banner);
             priceView = itemView.findViewById(R.id.price_banner);
+            image_banners = itemView.findViewById(R.id.image_banners);
         }
     }
 }
