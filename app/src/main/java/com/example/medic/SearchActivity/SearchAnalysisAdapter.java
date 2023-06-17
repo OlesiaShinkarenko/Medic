@@ -41,7 +41,7 @@ public class SearchAnalysisAdapter extends RecyclerView.Adapter<SearchAnalysisAd
     public void onBindViewHolder( ViewHolder holder, int position) {
         Analysis analysis = analyses.get(position);
         holder.name_analysis.setText(analysis.getName());
-        holder.price_analysis.setText(analysis.getPrice());
+        holder.price_analysis.setText(analysis.getPriceFormat());
         holder.time_analysis.setText(analysis.getTime_result());
         String displayName = analysis.getName();
         int startIndex = indexOfSearchQuery(displayName);

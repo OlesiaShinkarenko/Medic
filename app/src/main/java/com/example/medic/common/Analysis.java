@@ -1,8 +1,5 @@
 package com.example.medic.common;
 
-import android.content.Context;
-
-import com.example.medic.R;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -61,7 +58,11 @@ public class Analysis implements Serializable {
         this.description = description;
     }
 
-    public String getPrice() {
+
+    public String getPrice(){
+        return price;
+    }
+    public String getPriceFormat() {
         double priceDouble = Double.parseDouble(price);
         int priceInt = (int) priceDouble;
         String javaFormatString  = "%d ₽";

@@ -129,4 +129,6 @@
 
     <string name="select_patient">Выбор пациента</string>
     <string name="add_patient_1">Добавить пациента</string>
+
+    <string name="sum">Сумма</string>
 </resources>

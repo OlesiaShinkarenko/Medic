@@ -91,7 +91,6 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/basket_relativelayout"
             android:background="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

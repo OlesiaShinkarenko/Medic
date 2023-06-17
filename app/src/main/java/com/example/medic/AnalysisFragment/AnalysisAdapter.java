@@ -11,23 +11,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
-import com.example.medic.common.Order;
+import com.example.medic.common.DBHandlerMedic;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 
 public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHolder> {
 
+
     private LayoutInflater inflater;
     private List<Analysis> analyses;
     private Context context;
+    private DBHandlerMedic dbHandlerMedic;
 
     private Integer selectedPos;
 
     AnalysisAdapter.OnItemsCheckStateListener checkStateListener;
 
     public interface OnItemsCheckStateListener {
-        void onItemCheckStateChanged(int price_analysis);
+        void onItemCheckStateChanged();
     }
     public void setOnItemsCheckStateListener(AnalysisAdapter.OnItemsCheckStateListener checkStateListener) {
         this.checkStateListener = checkStateListener;
@@ -49,9 +51,10 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Analysis analysis = analyses.get(position);
         holder.name_analysis.setText(analysis.getName());
-        holder.price_analysis.setText(analysis.getPrice());
+        holder.price_analysis.setText(analysis.getPriceFormat());
         holder.time_analysis.setText(analysis.getTime_result());
-      if (!Order.id.contains(analysis.getId())){
+        dbHandlerMedic = new DBHandlerMedic(context);
+      if (!dbHandlerMedic.AnalysisExists(analysis.getId())){
             holder.button_add.setText(R.string.add_analysis);
             holder.button_add.setSelected(false);
         }else
@@ -80,12 +83,13 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
             price_analysis = itemView.findViewById(R.id.price_analysis);
             button_add = itemView.findViewById(R.id.button_add);
             button_add.setOnClickListener(this::onClick);
+            dbHandlerMedic = new DBHandlerMedic(context);
         }
 
         @Override
         public void onClick(View v) {
             selectedPos=getAdapterPosition();;
-           if(!Order.id.contains(analyses.get(selectedPos).getId())){
+           if(!dbHandlerMedic.AnalysisExists(analyses.get(selectedPos).getId())){
                 dialog = new BottomSheetDialog(context);
                 dialog.setContentView(R.layout.card_product);
                 dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -98,9 +102,9 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                     @Override
                     public void onClick(View v) {
                         button_add.setText(itemView.getResources().getText(R.string.delete));
-                        Order.id.add(analyses.get(selectedPos).getId());
+                        dbHandlerMedic.addAnalysis(analyses.get(selectedPos));
+                        checkStateListener.onItemCheckStateChanged();
                         button_add.setSelected(true);
-                        checkStateListener.onItemCheckStateChanged(analyses.get(selectedPos).getPrice_int());
                         dialog.dismiss();
                     }
                 });
@@ -117,15 +121,16 @@ public class AnalysisAdapter extends RecyclerView.Adapter<AnalysisAdapter.ViewHo
                 Button button_add = dialog.findViewById(R.id.button_add);
 
                 String javaFormatString  =  context.getString(R.string.add_with);
-               String  substitutedString  =  String.format(javaFormatString,analyses.get(selectedPos).getPrice());
+               String  substitutedString  =  String.format(javaFormatString,analyses.get(selectedPos).getPriceFormat());
                 button_add.setText(substitutedString);
                 dialog.show();
             }else {
-                Order.id.remove(analyses.get(selectedPos).getId());
-                checkStateListener.onItemCheckStateChanged(-analyses.get(selectedPos).getPrice_int());
+               dbHandlerMedic.deleteAnalysis(analyses.get(selectedPos).getId());
+               checkStateListener.onItemCheckStateChanged();
                 button_add.setSelected(false);
                 button_add.setText(itemView.getResources().getText(R.string.add_analysis));
             }
+
         }
     }
 }

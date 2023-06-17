@@ -3,7 +3,6 @@ package com.example.medic.AnalysisFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +21,9 @@ import com.example.medic.R;
 import com.example.medic.SearchActivity.SearchActivity;
 import com.example.medic.common.Analysis;
 import com.example.medic.common.AnalysisResult;
+import com.example.medic.common.DBHandlerMedic;
 import com.example.medic.common.DiscountAndNews;
 import com.example.medic.common.NewsResult;
-import com.example.medic.common.Order;
 import com.example.medic.common.RetrofitClient;
 
 import java.io.Serializable;
@@ -54,7 +53,9 @@ public class AnalysisFragment extends Fragment   {
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
     DiscountAdapter discountAdapter;
     AnalysisAdapter analysisAdapter;
+    String substitutedString;
     TextView discount_and_news, catalog_analysis , sum_basket;
+    DBHandlerMedic dbHandlerMedic;
 
     private Context context;
 
@@ -95,6 +96,15 @@ public class AnalysisFragment extends Fragment   {
             }
         });
         setData();
+        dbHandlerMedic = new DBHandlerMedic(context);
+        int sum = dbHandlerMedic.getSumPrice();
+        if (sum>0){
+            String javaFormatString  = "%d ₽";
+            substitutedString  =  String.format(javaFormatString, sum);
+            sum_basket.setText(substitutedString);
+            basket_relativelayout.setVisibility(View.VISIBLE);}else {
+            basket_relativelayout.setVisibility(View.GONE);
+        }
         /*
         scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -142,7 +152,15 @@ public class AnalysisFragment extends Fragment   {
                            analysisAdapter.setOnItemsCheckStateListener(new AnalysisAdapter.OnItemsCheckStateListener(){
 
                                @Override
-                               public void onItemCheckStateChanged(int price_analysis) {
+                               public void onItemCheckStateChanged() {
+                                   int sum = dbHandlerMedic.getSumPrice();
+                                   if (sum>0){
+                                       String javaFormatString  = "%d ₽";
+                                       substitutedString  =  String.format(javaFormatString, sum);
+                                       sum_basket.setText(substitutedString);
+                                       basket_relativelayout.setVisibility(View.VISIBLE);}else {
+                                       basket_relativelayout.setVisibility(View.GONE);
+                                   }
 
                                }
                            });
