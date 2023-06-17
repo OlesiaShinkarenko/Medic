@@ -54,7 +54,11 @@ public class DiscountAndNews {
     }
 
     public String getPrice() {
-        return price;
+        double priceDouble = Double.parseDouble(price);
+        int priceInt = (int) priceDouble;
+        String javaFormatString  = "%d ₽";
+        String  substitutedString  =  String.format(javaFormatString, priceInt);
+        return substitutedString;
     }
 
 }

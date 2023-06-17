@@ -51,7 +51,6 @@ public class VerificationActivity extends AppCompatActivity {
         sp = getSharedPreferences(MY_SETTINGS_EMAIL, Context.MODE_PRIVATE);
 
         email = sp.getString(PREFERENCES_EMAIL,"");
-        Log.d("email",email);
         New_code();
 
         btn_back.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +150,7 @@ public class VerificationActivity extends AppCompatActivity {
         int rn_number = random.nextInt(diff+1);
         rn_number+=min;
         randomCode = String.valueOf(rn_number);
+        Log.e("d",randomCode);
         EmailSend emailSend = new EmailSend();
         new Thread(new Runnable() {
             @Override

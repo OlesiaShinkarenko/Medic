@@ -30,16 +30,16 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
     ImageView indicator1,indicator2,indicator3, indicator4;
     Integer kol_click = 0;
     String password = "";
+    Intent i;
 
     Button number0,number1,number2,number3,number4,number5,number6,number7,number8,number9;
 
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
-    private static final String MY_SETTINGS2 = "my_settings_CreateCard";
     private static final String SETTINGS_PASSWORD = "settings_password";
     private static final String MY_SETTINGS_EMAIL = "my_settings_email";
     public static final String PREFERENCES_EMAIL = "Email";
     public static final String PREFERENCES_PASSWORD = "password";
-    SharedPreferences sp,sp2,sp3;
+    SharedPreferences sp,sp2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,7 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_create_password);
 
         sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
-        sp2 = getSharedPreferences(MY_SETTINGS2, Context.MODE_PRIVATE);
-        sp3 = getSharedPreferences(SETTINGS_PASSWORD, Context.MODE_PRIVATE);
+        sp2 = getSharedPreferences(SETTINGS_PASSWORD, Context.MODE_PRIVATE);
 
 
         skip = findViewById(R.id.skip);
@@ -84,13 +83,11 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Сохраняем, что пропущено
                 SharedPreferences.Editor r = sp.edit();
                 r.putBoolean("hasSkipped",true);
                 r.commit();
-                SharedPreferences.Editor r2 = sp2.edit();
-                r2.putBoolean("hasSkipped",true);
-                r2.commit();
-                Intent i = new Intent(CreatePasswordActivity.this, MainScreenActivity.class);
+                i = new Intent(CreatePasswordActivity.this, MainScreenActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -121,17 +118,17 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
             indicator4.setImageResource(R.drawable.create_password_false);
         }else if (kol_click ==4) {
             indicator4.setImageResource(R.drawable.create_password_true);
+            //сохраняем, что пароль был создан
             SharedPreferences.Editor r = sp.edit();
             r.putBoolean("hasSkipped",false);
             r.commit();
-            SharedPreferences.Editor r2 = sp2.edit();
-            r2.putBoolean("hasSkipped",false);
-            r2.commit();
-            SharedPreferences.Editor r3 = sp3.edit();
+            //сохрананяем пароль
+            SharedPreferences.Editor r3 = sp2.edit();
             r3.putString(PREFERENCES_PASSWORD,password);
             r3.commit();
-            sp3 = getSharedPreferences(MY_SETTINGS_EMAIL,Context.MODE_PRIVATE);
-            String email = sp3.getString(PREFERENCES_EMAIL, "");
+            //получаем email адрес, что выполнить запрос регистрации
+            sp2 = getSharedPreferences(MY_SETTINGS_EMAIL,Context.MODE_PRIVATE);
+            String email = sp2.getString(PREFERENCES_EMAIL, "");
             User user = new User(email, password);
             new Thread(new Runnable() {
                 public void run() {
@@ -152,7 +149,7 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                         Log.d("not","not");
                     }
             }}).start();
-            Intent i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
+             i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
             startActivity(i);
             finish();
         }

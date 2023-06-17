@@ -3,6 +3,7 @@ package com.example.medic.AnalysisFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.example.medic.common.Analysis;
 import com.example.medic.common.AnalysisResult;
 import com.example.medic.common.DiscountAndNews;
 import com.example.medic.common.NewsResult;
+import com.example.medic.common.Order;
 import com.example.medic.common.RetrofitClient;
 
 import java.io.Serializable;
@@ -50,12 +52,11 @@ public class AnalysisFragment extends Fragment   {
     LinearLayout in_basket;
     EditText search_analysis;
     RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
-    DiscountAdapter adapter;
+    DiscountAdapter discountAdapter;
     AnalysisAdapter analysisAdapter;
     TextView discount_and_news, catalog_analysis , sum_basket;
 
     private Context context;
-    private int sum_price = 0;
 
 
     @Override
@@ -94,7 +95,6 @@ public class AnalysisFragment extends Fragment   {
             }
         });
         setData();
-
         /*
         scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -143,14 +143,7 @@ public class AnalysisFragment extends Fragment   {
 
                                @Override
                                public void onItemCheckStateChanged(int price_analysis) {
-                                   if(price_analysis!=-1){
-                                       basket_relativelayout.setVisibility(View.VISIBLE);
-                                       sum_price+=price_analysis;
-                                       sum_basket.setText(String.valueOf(sum_price));
-                                   }
-                                   if (sum_price<=0){
-                                       basket_relativelayout.setVisibility(View.GONE);
-                                   }
+
                                }
                            });
                            recycle_view_catalog.setAdapter(analysisAdapter);
@@ -199,7 +192,7 @@ public class AnalysisFragment extends Fragment   {
                    @Override
                    public void onResponse(Call<NewsResult> call, Response<NewsResult> response) {
                        discountAndNews = response.body().getResults();
-                       DiscountAdapter discountAdapter = new DiscountAdapter(discountAndNews,context);
+                       discountAdapter = new DiscountAdapter(discountAndNews,context);
                        recycle_view_banners.setAdapter(discountAdapter);
                    }
 

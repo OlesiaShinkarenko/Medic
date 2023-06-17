@@ -1,6 +1,7 @@
 package com.example.medic.AnalysisFragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,24 +10,25 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.medic.R;
 import com.example.medic.common.DiscountAndNews;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHolder>{
-    private final LayoutInflater inflater;
+
     private final List<DiscountAndNews> discountAndNews;
+    private Context context;
 
     public DiscountAdapter(List<DiscountAndNews> discountAndNews, Context context) {
-        this.inflater = LayoutInflater.from(context);
+        this.context = context;
         this.discountAndNews = discountAndNews;
     }
 
     @Override
     public ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.list_item_banners,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_banners,parent,false);
         return new ViewHolder(view);
     }
 
@@ -36,7 +38,7 @@ public class DiscountAdapter extends RecyclerView.Adapter<DiscountAdapter.ViewHo
         holder.nameView.setText(discountAndNews1.getName());
         holder.descriptionView.setText(discountAndNews1.getDescription());
         holder.priceView.setText(discountAndNews1.getPrice());
-        Picasso.get().load(discountAndNews1.getImage()).into(holder.image_banners);
+        Glide.with(context).load(discountAndNews1.getImage()).into(holder.image_banners);
     }
 
     @Override
