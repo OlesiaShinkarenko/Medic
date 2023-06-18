@@ -12,10 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKeys;
 
-import com.example.medic.CreateCard.CreateCardActivity;
 import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
 import com.example.medic.common.DBHandlerMedic;
@@ -36,7 +33,6 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
 
     String password = "";
     boolean  hasSkipped;
-    boolean authoriz = false;
     Intent i;
     DBHandlerMedic dbHandlerMedic;
 
@@ -44,8 +40,13 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
 
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
     private static final String MY_SETTINGS_EMAIL = "my_settings_email";
-    public static final String PREFERENCES_EMAIL = "Email";
-    SharedPreferences sp,sp2;
+    private static final String PREFERENCES_EMAIL = "Email";
+    private static final String SETTINGS_REFRESH = "set_refresh";
+    private static final String REFRESH = "refresh";
+    private static final String SETTINGS_ACCESS= "access";
+    private static final String ACCESS = "access";
+    SharedPreferences sp,sp2,sp3,sp4;
+    Refresh refresh= new Refresh();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,35 +136,43 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
             indicator4.setImageResource(R.drawable.create_password_false);
         }else if (kol_click ==4) {
             indicator4.setImageResource(R.drawable.create_password_true);
-            if (!hasSkipped) {
-                String masterKeyAlias = null;
-                try {
-                    masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-                } catch (Exception e) {
-                }
-                try {
-                    EncryptedSharedPreferences sharedPreferences = (EncryptedSharedPreferences) EncryptedSharedPreferences.create(
-                            "preferences",
-                            masterKeyAlias,
-                            getApplicationContext(),
-                            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-                    );
-                   String savePassword = sharedPreferences.getString("password", "2803");
-                   if(password.equals(savePassword)||authoriz){
-                       sp2 = getSharedPreferences(MY_SETTINGS_EMAIL, Context.MODE_PRIVATE);
-                       String email = sp2.getString(PREFERENCES_EMAIL, "");
-                       User user = new User(email, password);
-                       new Thread(new Runnable() {
-                           @Override
-                           public void run() {
-                               try {
-                                   RetrofitClient.getRetrofitClient().SignIn(user).enqueue(new Callback<Refresh>() {
-                                       @Override
-                                       public void onResponse(Call<Refresh> call, Response<Refresh> response) {
-                                           if(response.code()==401){
-                                               authoriz = true;
+                sp2 = getSharedPreferences(MY_SETTINGS_EMAIL, Context.MODE_PRIVATE);
+                String email = sp2.getString(PREFERENCES_EMAIL, "");
+                User user = new User(email, password);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<Refresh>() {
+                                @Override
+                                public void onResponse(Call<Refresh> call, Response<Refresh> response) {
+                                    if(response.code()==400){
+                                              RetrofitClient.getRetrofitClient().SignIn(user).enqueue(new Callback<Refresh>() {
+                                                  @Override
+                                                  public void onResponse(Call<Refresh> call, Response<Refresh> response) {
+                                                      skip.setVisibility(View.INVISIBLE);
+                                                      create_password_text.setText("Введите пароль");
+                                                      Toast.makeText(CreatePasswordActivity.this,"Вы уже авторизованы!",Toast.LENGTH_SHORT).show();
+                                                      if(response.code()==401){
+                                                          Toast.makeText(CreatePasswordActivity.this,"Неверный пароль!",Toast.LENGTH_SHORT).show();
+                                                      }else {
+                                                          refresh = response.body();
+                                                          hasSkipped = false;
+                                                          i = new Intent(CreatePasswordActivity.this,MainScreenActivity.class);
+                                                          startActivity(i);
+                                                          finish();
+                                                      }
+                                                  }
+
+                                                  @Override
+                                                  public void onFailure(Call<Refresh> call, Throwable t) {
+
+                                                  }
+                                              });
                                            }else {
+                                        //сохраняем, что пароль был создан
+                                        refresh = response.body();
+                                       hasSkipped = false;
                                                i = new Intent(CreatePasswordActivity.this,MainScreenActivity.class);
                                                startActivity(i);
                                                finish();
@@ -178,68 +187,16 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                                }
                            }
                        }).start();
-
-                   }else {
-                       Toast.makeText(this, "Неверный пароль!", Toast.LENGTH_SHORT).show();
-                   }
-                } catch (Exception e) {
-                }
-
-            } else {
-                //сохраняем, что пароль был создан
-                SharedPreferences.Editor r = sp.edit();
-                r.putBoolean("hasSkipped", false);
-                r.commit();
-
-                //получаем email адрес, что выполнить запрос регистрации
-                sp2 = getSharedPreferences(MY_SETTINGS_EMAIL, Context.MODE_PRIVATE);
-                String email = sp2.getString(PREFERENCES_EMAIL, "");
-                User user = new User(email, password);
-                new Thread(new Runnable() {
-                    public void run() {
-                        try {
-                            RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<User>() {
-                                @Override
-                                public void onResponse(Call<User> call, Response<User> response) {
-                                   if (response.code()==400){
-                                       Toast.makeText(CreatePasswordActivity.this, "Вы уже были авторизированы",Toast.LENGTH_SHORT).show();
-                                       hasSkipped = false;
-                                       skip.setVisibility(View.INVISIBLE);
-                                       create_password_text.setText("Введите пароль");
-                                   }else {
-                                       //сохрананяем пароль
-                                       String masterKeyAlias = null;
-                                       try {
-                                           masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-                                       } catch (Exception e) {
-                                       }
-                                       try {
-                                           EncryptedSharedPreferences sharedPreferences = (EncryptedSharedPreferences) EncryptedSharedPreferences.create(
-                                                   "preferences",
-                                                   masterKeyAlias,
-                                                   getApplicationContext(),
-                                                   EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                                                   EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-                                           );
-                                           sharedPreferences.edit().putString("password", password).apply();
-                                       } catch (Exception e) {
-                                       }
-                                       i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
-                                       startActivity(i);
-                                       finish();
-                                   }
-                                }
-
-                                @Override
-                                public void onFailure(Call<User> call, Throwable t) {
-
-                                }
-                            });
-                        } catch (Exception ex) {
-                        }
-                    }
-                }).start();
-            }
+            SharedPreferences.Editor r = sp.edit();
+            r.putBoolean("hasSkipped", false);
+            r.commit();
+            sp3 = getSharedPreferences(SETTINGS_REFRESH,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp3.edit();
+            editor.putString(REFRESH, refresh.getRefresh());
+            editor.commit();
+            sp4 = getSharedPreferences(SETTINGS_ACCESS,Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor1 = sp4.edit();
+            editor1.putString(ACCESS,refresh.getAccess());
         }
     }
 

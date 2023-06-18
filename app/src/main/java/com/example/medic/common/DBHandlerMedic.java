@@ -23,6 +23,16 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String BIO_COL_BASKET = "bio";
     private static final String NUMBER_COL_BASKET = "num";
 
+    private static final String TABLE_NAME_PATIENT = "patient";
+    private static final String ID_PATIENT_COL_PATIENT="id_patient";
+    private static final String FIRST_NAME_COL_PATIENT= "first_name";
+    private static final String LAST_NAME_COL_PATIENT = "last_name";
+    private static final String MIDDLE_NAME_COL_PATIENT = "middle_name";
+    private static final String DATE_OF_BIRTH_COL_PATIENT = "date_of_birth";
+    private static final String POL_COL_PATIENT = "pol";
+    private static final String IMAGE_COL_PATIENT = "image";
+
+
 
     public DBHandlerMedic(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -40,7 +50,17 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
                 + BIO_COL_BASKET + " TEXT,"
                 + NUMBER_COL_BASKET + " INTEGER DEFAULT 1)"
                 ;
+        String query2 = "CREATE TABLE "+TABLE_NAME_PATIENT+" ("
+                +ID_PATIENT_COL_PATIENT+" INTEGER, "
+                +FIRST_NAME_COL_PATIENT+" TEXT, "
+                +LAST_NAME_COL_PATIENT+" TEXT, "
+                +MIDDLE_NAME_COL_PATIENT+" TEXT, "
+                +DATE_OF_BIRTH_COL_PATIENT+" TEXT, "
+                +POL_COL_PATIENT+" TEXT, "
+                +IMAGE_COL_PATIENT+ " TEXT DEFAULT '')";
+
         db.execSQL(query);
+        db.execSQL(query2);
     }
 
 
@@ -59,7 +79,34 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.insert(TABLE_NAME_BASKET,null,contentValues);
         database.close();
     }
+    public void addCardPatient(CardPatient cardPatient){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
 
+        contentValues.put(ID_PATIENT_COL_PATIENT,cardPatient.getId());
+        contentValues.put(FIRST_NAME_COL_PATIENT,cardPatient.getFirst_name());
+        contentValues.put(LAST_NAME_COL_PATIENT,cardPatient.getLast_name());
+        contentValues.put(MIDDLE_NAME_COL_PATIENT,cardPatient.getMiddle_name());
+        contentValues.put(DATE_OF_BIRTH_COL_PATIENT,cardPatient.getDate_of_birth());
+        contentValues.put(POL_COL_PATIENT,cardPatient.getPol());
+        contentValues.put(IMAGE_COL_PATIENT,cardPatient.getImage());
+        database.insert(TABLE_NAME_PATIENT,null,contentValues);
+        database.close();
+    }
+
+    public Integer getCardPatientId(){
+        int id = -1;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor =sqLiteDatabase.rawQuery("SELECT "+ID_PATIENT_COL_PATIENT+" FROM "+TABLE_NAME_PATIENT,null);
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                id = cursor.getInt(0);
+            }
+        }finally {
+            cursor.close();
+        }
+        return id;
+    }
     public ArrayList<Analysis> readAnalysis(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_BASKET,null);
