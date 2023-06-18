@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.medic.CreatePassword.CreatePasswordActivity;
-import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
 import com.example.medic.Verification.VerificationActivity;
 
@@ -43,7 +42,6 @@ public class RegistrationActivity extends AppCompatActivity {
         sp= getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
         hasSkipped = sp.getBoolean("hasSkipped",true);
         if(!hasSkipped){
-
            i = new Intent(RegistrationActivity.this, CreatePasswordActivity.class);
             startActivity(i);
             finish();

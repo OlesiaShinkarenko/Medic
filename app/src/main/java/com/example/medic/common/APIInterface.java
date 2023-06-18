@@ -19,4 +19,7 @@ public interface APIInterface {
 
     @GET("news/")
     Call<NewsResult>getNews();
+
+    @POST("signin/")
+    Call<Refresh> SignIn(@Body User user);
 }
