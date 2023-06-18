@@ -97,14 +97,7 @@ public class AnalysisFragment extends Fragment   {
         });
         setData();
         dbHandlerMedic = new DBHandlerMedic(context);
-        int sum = dbHandlerMedic.getSumPrice();
-        if (sum>0){
-            String javaFormatString  = "%d ₽";
-            substitutedString  =  String.format(javaFormatString, sum);
-            sum_basket.setText(substitutedString);
-            basket_relativelayout.setVisibility(View.VISIBLE);}else {
-            basket_relativelayout.setVisibility(View.GONE);
-        }
+        setSum_basket();
         /*
         scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -153,15 +146,7 @@ public class AnalysisFragment extends Fragment   {
 
                                @Override
                                public void onItemCheckStateChanged() {
-                                   int sum = dbHandlerMedic.getSumPrice();
-                                   if (sum>0){
-                                       String javaFormatString  = "%d ₽";
-                                       substitutedString  =  String.format(javaFormatString, sum);
-                                       sum_basket.setText(substitutedString);
-                                       basket_relativelayout.setVisibility(View.VISIBLE);}else {
-                                       basket_relativelayout.setVisibility(View.GONE);
-                                   }
-
+                                   setSum_basket();
                                }
                            });
                            recycle_view_catalog.setAdapter(analysisAdapter);
@@ -180,7 +165,6 @@ public class AnalysisFragment extends Fragment   {
                                @Override
                                public void onItemCheckStateChanged(int category) {
                                    if (category != -1 && analyses != null) {
-
                                        analyses.clear();
                                        analyses.addAll(fullanalyses);
                                        analysis_in_categories = new ArrayList<>();
@@ -224,5 +208,15 @@ public class AnalysisFragment extends Fragment   {
 
     }
 
+    private void setSum_basket(){
+        int sum = dbHandlerMedic.getSumPrice();
+        if (sum>0){
+            String javaFormatString  = "%d ₽";
+            substitutedString  =  String.format(javaFormatString, sum);
+            sum_basket.setText(substitutedString);
+            basket_relativelayout.setVisibility(View.VISIBLE);}else {
+            basket_relativelayout.setVisibility(View.GONE);
+        }
+    }
 
 }

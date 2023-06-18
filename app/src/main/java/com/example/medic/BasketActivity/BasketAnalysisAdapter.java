@@ -50,6 +50,7 @@ public class BasketAnalysisAdapter  extends RecyclerView.Adapter<BasketAnalysisA
         holder.kol_patient_analysis.setText(s);
     }
 
+
     @Override
     public int getItemCount() {
         return analyses.size();
@@ -71,8 +72,6 @@ public class BasketAnalysisAdapter  extends RecyclerView.Adapter<BasketAnalysisA
             remove_patient = itemView.findViewById(R.id.remove_patient);
             add_patient = itemView.findViewById(R.id.add_patient);
 
-
-
             remove_patient.setEnabled(false);
 
             add_patient.setOnClickListener(new View.OnClickListener() {
@@ -80,9 +79,7 @@ public class BasketAnalysisAdapter  extends RecyclerView.Adapter<BasketAnalysisA
                 public void onClick(View view) {
                     remove_patient.setEnabled(true);
                     dbHandlerMedic.addPatient(analyses.get(getAdapterPosition()).getId());
-                    kol_patient = dbHandlerMedic.getPatient(analyses.get(getAdapterPosition()).getId());
-                    String s = itemView.getResources().getQuantityString(R.plurals.patient, kol_patient,kol_patient);
-                    kol_patient_analysis.setText(s);
+                    setKol_patient_analysis();
                     checkStateListener.onItemCheckStateChanged();
                 }
             });
@@ -91,9 +88,7 @@ public class BasketAnalysisAdapter  extends RecyclerView.Adapter<BasketAnalysisA
                 public void onClick(View view) {
                     if(kol_patient>=2){
                         dbHandlerMedic.deletePatient(analyses.get(getAdapterPosition()).getId());
-                        kol_patient = dbHandlerMedic.getPatient(analyses.get(getAdapterPosition()).getId());
-                        String s = itemView.getResources().getQuantityString(R.plurals.patient, kol_patient,kol_patient);
-                        kol_patient_analysis.setText(s);
+                        setKol_patient_analysis();
                         checkStateListener.onItemCheckStateChanged();
                     }else{
                         remove_patient.setEnabled(false);
@@ -111,6 +106,11 @@ public class BasketAnalysisAdapter  extends RecyclerView.Adapter<BasketAnalysisA
                     notifyDataSetChanged();
                 }
             });
+        }
+        private void setKol_patient_analysis(){
+            kol_patient = dbHandlerMedic.getPatient(analyses.get(getAdapterPosition()).getId());
+            String s = itemView.getResources().getQuantityString(R.plurals.patient, kol_patient,kol_patient);
+            kol_patient_analysis.setText(s);
         }
     }
 }

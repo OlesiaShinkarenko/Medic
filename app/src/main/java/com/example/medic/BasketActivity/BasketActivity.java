@@ -16,14 +16,14 @@ import com.example.medic.R;
 import com.example.medic.common.Analysis;
 import com.example.medic.common.DBHandlerMedic;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BasketActivity extends AppCompatActivity {
 
     ImageButton btn_back, icon_basket_delete;
 
-    List<Analysis> analyses = new ArrayList<>();
+    List<Analysis> analyses;
+    Intent i;
     RecyclerView recycler_view_basket;
     Button transition;
     DBHandlerMedic dbHandlerMedic;
@@ -43,19 +43,13 @@ public class BasketActivity extends AppCompatActivity {
         dbHandlerMedic = new DBHandlerMedic(BasketActivity.this);
         analyses = dbHandlerMedic.readAnalysis();
 
-        int sum = dbHandlerMedic.getSumPrice();
-        String javaFormatString  = "%d ₽";
-        String substitutedString  =  String.format(javaFormatString, sum);
-        sum_analysis.setText(substitutedString);
+        SetSum();
 
         BasketAnalysisAdapter adapter = new BasketAnalysisAdapter(analyses, this);
         adapter.setOnItemsCheckStateListener(new BasketAnalysisAdapter.OnItemsCheckStateListener() {
             @Override
             public void onItemCheckStateChanged() {
-                int sum = dbHandlerMedic.getSumPrice();
-                    String javaFormatString  = "%d ₽";
-                   String substitutedString  =  String.format(javaFormatString, sum);
-                sum_analysis.setText(substitutedString);
+                SetSum();
 
             }
         });
@@ -65,7 +59,7 @@ public class BasketActivity extends AppCompatActivity {
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(BasketActivity.this, MainScreenActivity.class);
+                i = new Intent(BasketActivity.this, MainScreenActivity.class);
                 startActivity(i);
                 finish();
             }
@@ -76,6 +70,8 @@ public class BasketActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dbHandlerMedic.deleteAllAnalysis();
+                analyses.clear();
+                SetSum();
                 adapter.notifyDataSetChanged();
             }
         });
@@ -83,9 +79,16 @@ public class BasketActivity extends AppCompatActivity {
         transition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(BasketActivity.this, OrderRegistrationActivity.class);
+                i = new Intent(BasketActivity.this, OrderRegistrationActivity.class);
                 startActivity(i);
             }
         });
+    }
+
+    public void SetSum(){
+        int sum = dbHandlerMedic.getSumPrice();
+        String javaFormatString  = "%d ₽";
+        String substitutedString  =  String.format(javaFormatString, sum);
+        sum_analysis.setText(substitutedString);
     }
 }

@@ -106,15 +106,19 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     }
 
     public int getPatient(Integer analysis) {
+        int number= 0;
         SQLiteDatabase database = this.getReadableDatabase();
         Cursor cursor = database.query(TABLE_NAME,
                 new  String[]{NUMBER_COL},
                 " id_analysis=?",
                 new String[]{String.valueOf(analysis)},null,null,null,null);
-        if (cursor!=null){
-            cursor.moveToFirst();
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                number = cursor.getInt(0);
+            }
+        }finally {
+            cursor.close();
         }
-        int number = cursor.getInt(0);
         return number;
     }
 
