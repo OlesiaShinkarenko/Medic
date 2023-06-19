@@ -2,9 +2,7 @@ package com.example.medic.common;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
-public class Analysis implements Serializable {
+public class Analysis  {
     @SerializedName("id")
     private Integer id;
     @SerializedName("name")
@@ -68,11 +66,6 @@ public class Analysis implements Serializable {
         String javaFormatString  = "%d ₽";
         String  substitutedString  =  String.format(javaFormatString, priceInt);
         return substitutedString;
-    }
-    public int getPrice_int() {
-        double priceDouble = Double.parseDouble(price);
-        int priceInt = (int) priceDouble;
-        return priceInt;
     }
 
     public void setPrice(String price) {

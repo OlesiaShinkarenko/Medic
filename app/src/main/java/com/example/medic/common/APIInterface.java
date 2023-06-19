@@ -11,7 +11,7 @@ import retrofit2.http.Path;
 
 public interface APIInterface {
     @POST("signup/")
-    Call<Refresh> SignUp(@Body User user);
+    Call<RefreshAccess> SignUp(@Body User user);
 
     @GET("catalog/")
     Call<AnalysisResult> getAnalyses();
@@ -23,11 +23,13 @@ public interface APIInterface {
     Call<NewsResult>getNews();
 
     @POST("signin/")
-    Call<Refresh> SignIn(@Body User user);
-
+    Call<RefreshAccess> SignIn(@Body User user);
     @POST("profiles/")
-    Call<CardPatient> CreateCardPatient(@Body CardPatient cardPatient, @Header("Authorization")String auto);
+    Call<CardPatient> CreateCardPatient(@Header("Authorization")String autho,@Body CardPatient cardPatient);
 
     @GET("profiles/{id}")
-    Call<CardPatient> GetProfile(@Path("id")Integer id);
+    Call<CardPatient> GetProfile(@Header("Authorization")String autho,@Path("id")Integer id);
+    @POST("token/refresh/")
+    Call<RefreshAccess> getAccess(@Body Refresh refresh);
+
 }

@@ -79,7 +79,7 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.insert(TABLE_NAME_BASKET,null,contentValues);
         database.close();
     }
-    public void addCardPatient(CardPatient cardPatient){
+   public void addCardPatient(CardPatient cardPatient){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -93,6 +93,8 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.insert(TABLE_NAME_PATIENT,null,contentValues);
         database.close();
     }
+
+
 
     public Integer getCardPatientId(){
         int id = -1;

@@ -9,14 +9,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.medic.CreateCard.CreateCardActivity;
 import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
 import com.example.medic.common.DBHandlerMedic;
-import com.example.medic.common.Refresh;
+import com.example.medic.common.RefreshAccess;
 import com.example.medic.common.RetrofitClient;
 import com.example.medic.common.User;
 
@@ -41,12 +41,10 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
     private static final String MY_SETTINGS = "my_settings_OnCreatePassword";
     private static final String MY_SETTINGS_EMAIL = "my_settings_email";
     private static final String PREFERENCES_EMAIL = "Email";
-    private static final String SETTINGS_REFRESH = "set_refresh";
-    private static final String REFRESH = "refresh";
-    private static final String SETTINGS_ACCESS= "access";
-    private static final String ACCESS = "access";
-    SharedPreferences sp,sp2,sp3,sp4;
-    Refresh refresh= new Refresh();
+    private static final String SETTING_ACCESS= "setting_refresh";
+    private static final String ACCESS = "refresh";
+    RefreshAccess refresh = new RefreshAccess();
+    SharedPreferences sp,sp2,sp3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_create_password);
 
         sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+
 
 
         skip = findViewById(R.id.skip);
@@ -142,61 +141,56 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<Refresh>() {
+                        hasSkipped = sp.getBoolean("hasSkipped",true);
+                        if (!hasSkipped){
+                            RetrofitClient.getRetrofitClient().SignIn(user).enqueue(new Callback<RefreshAccess>() {
                                 @Override
-                                public void onResponse(Call<Refresh> call, Response<Refresh> response) {
-                                    if(response.code()==400){
-                                              RetrofitClient.getRetrofitClient().SignIn(user).enqueue(new Callback<Refresh>() {
-                                                  @Override
-                                                  public void onResponse(Call<Refresh> call, Response<Refresh> response) {
-                                                      skip.setVisibility(View.INVISIBLE);
-                                                      create_password_text.setText("Введите пароль");
-                                                      Toast.makeText(CreatePasswordActivity.this,"Вы уже авторизованы!",Toast.LENGTH_SHORT).show();
-                                                      if(response.code()==401){
-                                                          Toast.makeText(CreatePasswordActivity.this,"Неверный пароль!",Toast.LENGTH_SHORT).show();
-                                                      }else {
-                                                          refresh = response.body();
-                                                          hasSkipped = false;
-                                                          i = new Intent(CreatePasswordActivity.this,MainScreenActivity.class);
-                                                          startActivity(i);
-                                                          finish();
-                                                      }
-                                                  }
+                                public void onResponse(Call<RefreshAccess> call, Response<RefreshAccess> response) {
+                                    refresh = response.body();
+                                    sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sp3.edit();
+                                    editor.putString(ACCESS, refresh.getAccess());
+                                    editor.commit();
+                                    sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor r = sp.edit();
+                                    r.putBoolean("hasSkipped",false);
+                                    r.commit();
+                                    i = new Intent(CreatePasswordActivity.this,MainScreenActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
 
-                                                  @Override
-                                                  public void onFailure(Call<Refresh> call, Throwable t) {
+                                @Override
+                                public void onFailure(Call<RefreshAccess> call, Throwable t) {
 
-                                                  }
-                                              });
-                                           }else {
-                                        //сохраняем, что пароль был создан
-                                        refresh = response.body();
-                                       hasSkipped = false;
-                                               i = new Intent(CreatePasswordActivity.this,MainScreenActivity.class);
-                                               startActivity(i);
-                                               finish();
-                                           }
-                                       }
-
-                                       @Override
-                                       public void onFailure(Call<Refresh> call, Throwable t) {
-                                       }
-                                   });
-                               }catch (Exception e){
+                                }
+                            });
+                        }else {
+                           RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<RefreshAccess>() {
+                               @Override
+                               public void onResponse(Call<RefreshAccess> call, Response<RefreshAccess> response) {
+                                   refresh = response.body();
+                                   sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
+                                   SharedPreferences.Editor editor = sp3.edit();
+                                   editor.putString(ACCESS, refresh.getAccess());
+                                   editor.commit();
+                                   sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                                   SharedPreferences.Editor r = sp.edit();
+                                   r.putBoolean("hasSkipped",false);
+                                   r.commit();
+                                   i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
+                                   startActivity(i);
+                                   finish();
                                }
-                           }
-                       }).start();
-            SharedPreferences.Editor r = sp.edit();
-            r.putBoolean("hasSkipped", false);
-            r.commit();
-            sp3 = getSharedPreferences(SETTINGS_REFRESH,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sp3.edit();
-            editor.putString(REFRESH, refresh.getRefresh());
-            editor.commit();
-            sp4 = getSharedPreferences(SETTINGS_ACCESS,Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor1 = sp4.edit();
-            editor1.putString(ACCESS,refresh.getAccess());
+
+                               @Override
+                               public void onFailure(Call<RefreshAccess> call, Throwable t) {
+
+                               }
+                           });
+                        }
+                    }
+                }).start();
         }
     }
 

@@ -1,7 +1,5 @@
 package com.example.medic.common;
 
-import com.example.medic.common.APIInterface;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

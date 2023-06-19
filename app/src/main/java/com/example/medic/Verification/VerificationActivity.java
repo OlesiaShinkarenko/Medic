@@ -161,7 +161,6 @@ public class VerificationActivity extends AppCompatActivity {
                     emailSend.setTo(email);
                     emailSend.send();
                 } catch (Exception e) {
-                    Toast.makeText(VerificationActivity.this, e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             }
         }).start();
