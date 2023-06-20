@@ -99,7 +99,7 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     public Integer getCardPatientId(){
         int id = -1;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor =sqLiteDatabase.rawQuery("SELECT "+ID_PATIENT_COL_PATIENT+" FROM "+TABLE_NAME_PATIENT,null);
+        Cursor cursor =sqLiteDatabase.rawQuery("SELECT MIN("+ID_PATIENT_COL_PATIENT+") FROM "+TABLE_NAME_PATIENT,null);
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 id = cursor.getInt(0);
@@ -180,6 +180,12 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         boolean exists = (cursor.getCount()>0);
         return exists;
     }
+    public boolean PatientExists(Integer patient){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_PATIENT +" WHERE id_patient ="+patient,null);
+        boolean exists = (cursor.getCount()>0);
+        return exists;
+    }
 
     public void deleteAnalysis(Integer analysis){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -199,5 +205,19 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         int sum = c.getInt(0);
         c.close();
         return sum;
+    }
+
+    public void updatePatient(CardPatient cardPatient){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        int patientId = cardPatient.getId();
+        contentValues.put(FIRST_NAME_COL_PATIENT,cardPatient.getFirst_name());
+        contentValues.put(LAST_NAME_COL_PATIENT,cardPatient.getLast_name());
+        contentValues.put(MIDDLE_NAME_COL_PATIENT,cardPatient.getMiddle_name());
+        contentValues.put(DATE_OF_BIRTH_COL_PATIENT,cardPatient.getDate_of_birth());
+        contentValues.put(POL_COL_PATIENT,cardPatient.getPol());
+        contentValues.put(IMAGE_COL_PATIENT,cardPatient.getImage());
+        database.update(TABLE_NAME_PATIENT,contentValues,"id_patient = "+patientId,null);
+        database.close();
     }
 }

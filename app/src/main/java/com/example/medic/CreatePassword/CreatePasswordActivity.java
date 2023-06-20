@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -44,8 +45,9 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
     private static final String PREFERENCES_EMAIL = "Email";
     private static final String SETTING_ACCESS= "setting_refresh";
     private static final String ACCESS = "refresh";
+    private static final String MY_SETTINGS_CARD = "my_settings_CreateCard";
     RefreshAccess refresh = new RefreshAccess();
-    SharedPreferences sp,sp2,sp3;
+    SharedPreferences sp,sp2,sp3,sp4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,6 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_create_password);
 
         sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
-
-
 
         skip = findViewById(R.id.skip);
         indicator1 = findViewById(R.id.indicator1);
@@ -151,12 +151,16 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                                     sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sp3.edit();
                                     editor.putString(ACCESS, refresh.getAccess());
-                                    Log.d("acess",refresh.getAccess());
                                     editor.commit();
                                     sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
                                     SharedPreferences.Editor r = sp.edit();
                                     r.putBoolean("hasSkipped",false);
                                     r.commit();
+                                    sp4 = getSharedPreferences(MY_SETTINGS_CARD, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor r2 = sp4.edit();
+                                    r2.putBoolean("hasSkipped",false);
+                                    r2.commit();
+                                    Log.d("access",refresh.getAccess());
                                     i = new Intent(CreatePasswordActivity.this,MainScreenActivity.class);
                                     startActivity(i);
                                     finish();
@@ -171,18 +175,30 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                            RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<RefreshAccess>() {
                                @Override
                                public void onResponse(Call<RefreshAccess> call, Response<RefreshAccess> response) {
-                                   refresh = response.body();
-                                   sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
-                                   SharedPreferences.Editor editor = sp3.edit();
-                                   editor.putString(ACCESS, refresh.getAccess());
-                                   editor.commit();
-                                   sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
-                                   SharedPreferences.Editor r = sp.edit();
-                                   r.putBoolean("hasSkipped",false);
-                                   r.commit();
-                                   i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
-                                   startActivity(i);
-                                   finish();
+                                   if (response.isSuccessful()){
+                                       refresh = response.body();
+                                       sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
+                                       SharedPreferences.Editor editor = sp3.edit();
+                                       editor.putString(ACCESS, refresh.getAccess());
+                                       editor.commit();
+                                       sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                                       SharedPreferences.Editor r = sp.edit();
+                                       r.putBoolean("hasSkipped",false);
+                                       r.commit();
+                                       i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
+                                       startActivity(i);
+                                       finish();
+                                   }
+                                  else if (response.code()==400){
+                                       Toast.makeText(CreatePasswordActivity.this,"Вы уже авторизированы!", Toast.LENGTH_SHORT).show();
+                                       sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                                       SharedPreferences.Editor r = sp.edit();
+                                       r.putBoolean("hasSkipped",false);
+                                       r.commit();
+                                       i = new Intent(CreatePasswordActivity.this,CreatePasswordActivity.class);
+                                       startActivity(i);
+                                       finish();
+                                   }
                                }
 
                                @Override

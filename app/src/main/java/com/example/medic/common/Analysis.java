@@ -2,7 +2,9 @@ package com.example.medic.common;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Analysis  {
+import java.io.Serializable;
+
+public class Analysis  implements Serializable {
     @SerializedName("id")
     private Integer id;
     @SerializedName("name")
