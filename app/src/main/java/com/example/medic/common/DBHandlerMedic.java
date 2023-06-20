@@ -23,6 +23,7 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String BIO_COL_BASKET = "bio";
     private static final String NUMBER_COL_BASKET = "num";
 
+
     private static final String TABLE_NAME_PATIENT = "patient";
     private static final String ID_PATIENT_COL_PATIENT="id_patient";
     private static final String FIRST_NAME_COL_PATIENT= "first_name";
@@ -31,6 +32,16 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String DATE_OF_BIRTH_COL_PATIENT = "date_of_birth";
     private static final String POL_COL_PATIENT = "pol";
     private static final String IMAGE_COL_PATIENT = "image";
+
+
+    private static final String TABLE_NAME_ADDRESS = "address";
+    private static final String ID_COL_ADDRESS = "id";
+    private static final String ADDRESS_COL_ADDRESS = "addre";
+    private static final String FLAT_COL_ADDRESS = "flat";
+    private static final String ENTRANCE_COL_ADDRESS = "entrance";
+    private static final String FLOOR_COL_ADDRESS = "floor";
+    private static final String DOORPHONE_COL_ADDRESS = "doorphone";
+    private static final String LABEL_COL_ADDRESS = "label";
 
 
 
@@ -59,10 +70,52 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
                 +POL_COL_PATIENT+" TEXT, "
                 +IMAGE_COL_PATIENT+ " TEXT DEFAULT '')";
 
+        String query3 = "CREATE TABLE "+TABLE_NAME_ADDRESS+" ("
+                +ID_COL_ADDRESS+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +ADDRESS_COL_ADDRESS + " TEXT,"
+                +FLAT_COL_ADDRESS + " TEXT,"
+                +ENTRANCE_COL_ADDRESS + " TEXT,"
+                +FLOOR_COL_ADDRESS + " TEXT,"
+                +DOORPHONE_COL_ADDRESS+" TEXT,"
+                +LABEL_COL_ADDRESS+ " TEXT)";
         db.execSQL(query);
         db.execSQL(query2);
+        db.execSQL(query3);
     }
 
+    public void addAddress(Address address){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ADDRESS_COL_ADDRESS,address.getAdd());
+        contentValues.put(FLAT_COL_ADDRESS,address.getFlat());
+        contentValues.put(ENTRANCE_COL_ADDRESS,address.getEntrance());
+        contentValues.put(FLOOR_COL_ADDRESS,address.getFloor());
+        contentValues.put(DOORPHONE_COL_ADDRESS,address.getDoorphone());
+        contentValues.put(LABEL_COL_ADDRESS,address.getLabel());
+
+        database.insert(TABLE_NAME_ADDRESS,null,contentValues);
+        database.close();
+    }
+
+    public boolean AddressExist(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_ADDRESS,null);
+        boolean exists = (cursor.getCount()>0);
+        return exists;
+    }
+    public Address getAddress(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_ADDRESS,null);
+        Address address= null;
+        if(cursor.moveToFirst()) {
+            address = new Address(cursor.getString(1),cursor.getString(2),
+                    cursor.getString(3),cursor.getString(4),cursor.getString(5),
+                    cursor.getString(6));
+        }
+        cursor.close();
+        return address;
+    }
 
     public void addAnalysis(Analysis analysis){
         SQLiteDatabase database = this.getWritableDatabase();

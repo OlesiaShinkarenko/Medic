@@ -200,7 +200,6 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                                        finish();
                                    }
                                }
-
                                @Override
                                public void onFailure(Call<RefreshAccess> call, Throwable t) {
 

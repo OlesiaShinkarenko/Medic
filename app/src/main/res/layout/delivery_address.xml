@@ -60,6 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:layout_marginLeft="12dp"
             android:textSize="14sp"
             android:textColor="@color/color_categories"
             android:text="@string/width"
@@ -67,6 +68,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:layout_marginLeft="12dp"
             android:textSize="14sp"
             android:textColor="@color/color_categories"
             android:text="@string/height"
@@ -81,6 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:inputType="number"
             android:id="@+id/longitude_address"
             android:layout_marginRight="12dp"
             android:background="@drawable/edittext_style"
@@ -90,6 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:inputType="number"
             android:id="@+id/width_address"
             android:layout_marginRight="12dp"
             android:background="@drawable/edittext_style"
@@ -99,8 +103,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:inputType="number"
             android:id="@+id/height_address"
-            android:layout_marginRight="12dp"
             android:background="@drawable/edittext_style"
             android:textSize="15sp"
             android:textColor="@color/black"
@@ -122,6 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:layout_marginLeft="12dp"
             android:textSize="14sp"
             android:textColor="@color/color_categories"
             android:text="@string/entrance"
@@ -129,6 +134,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <TextView
+            android:layout_marginLeft="12dp"
             android:textSize="14sp"
             android:textColor="@color/color_categories"
             android:text="@string/floor"
@@ -143,6 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
+            android:inputType="number"
             android:id="@+id/flat_address"
             android:layout_marginRight="12dp"
             android:background="@drawable/edittext_style"
@@ -152,6 +159,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:inputType="number"
             android:id="@+id/entrance_address"
             android:layout_marginRight="12dp"
             android:background="@drawable/edittext_style"
@@ -161,8 +169,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <EditText
+            android:inputType="number"
             android:id="@+id/floor_address"
-            android:layout_marginRight="12dp"
             android:background="@drawable/edittext_style"
             android:textSize="15sp"
             android:textColor="@color/black"
@@ -234,7 +242,6 @@
         app:layout_constraintTop_toBottomOf="@id/edittext_address_save"
         android:layout_width="match_parent"
         android:background="@drawable/button_style"
-        android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="40dp"
         android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

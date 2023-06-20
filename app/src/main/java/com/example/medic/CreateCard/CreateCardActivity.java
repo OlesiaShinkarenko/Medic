@@ -130,7 +130,10 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
 
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        if(editText_name.getText().length() == 0 ||editText_lastname.getText().length() == 0||editText_surname.getText().length() == 0||editText_date_birthday.getText().length() == 0) {
+        if(editText_name.getText().length() == 0 ||
+                editText_lastname.getText().length() == 0||
+                editText_surname.getText().length() == 0||
+                editText_date_birthday.getText().length() == 0) {
             btn_create_card.setEnabled(false);
         }else
         {
