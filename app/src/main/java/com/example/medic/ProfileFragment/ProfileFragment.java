@@ -9,13 +9,17 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.medic.CreateCard.CreateCardActivity;
 import com.example.medic.R;
 import com.example.medic.common.CardPatient;
@@ -33,8 +37,10 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     DBHandlerMedic dbHandlerMedic;
     private Context context;
     Spinner spinner_gender;
+    ImageView profile_image;
     CardPatient cardPatient;
     Button btn_create_card;
+    Integer profileId;
     EditText editText_first_name,editText_lastname,editText_middle_name,editText_date_birthday;
     private static final String SETTING_ACCESS= "setting_refresh";
     private static final String ACCESS = "refresh";
@@ -46,11 +52,13 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //получаем был ли пропущен экран создания карточки, если да, переход на экран создания
         SharedPreferences sp = getContext().getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
         boolean hasSkipped = sp.getBoolean("hasSkipped",true);
         if(hasSkipped){
             Intent i = new Intent(getContext(), CreateCardActivity.class);
             startActivity(i);
+            getActivity().finish();
         }
         context = this.getActivity();
     }
@@ -65,15 +73,27 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         editText_date_birthday = view.findViewById(R.id.editText_date_birthday);
         spinner_gender = view.findViewById(R.id.spinner_gender);
         btn_create_card = view.findViewById(R.id.btn_create_card);
+        profile_image = view.findViewById(R.id.profile_image);
 
+        //присваиваем выпадающему списку с выбором пола адаптер
+        ArrayAdapter<?> adapter = ArrayAdapter.createFromResource(context, R.array.list_gender, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_gender.setAdapter(adapter);
+
+
+        //инизиализируем вспомогательный класс для работы с БД
         dbHandlerMedic = new DBHandlerMedic(context);
+        profileId = dbHandlerMedic.getCardPatientId();
+
+
         sharedPreferences = context.getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
         String access = "Bearer "+sharedPreferences.getString(ACCESS,"");
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    RetrofitClient.getRetrofitClient().GetProfile(access,dbHandlerMedic.getCardPatientId()).enqueue(new Callback<CardPatient>() {
+                    RetrofitClient.getRetrofitClient().GetProfile(access,profileId).enqueue(new Callback<CardPatient>() {
                         @Override
                         public void onResponse(Call<CardPatient> call, Response<CardPatient> response) {
                             if (response.isSuccessful()){
@@ -82,8 +102,22 @@ public class ProfileFragment extends Fragment implements TextWatcher {
                                 editText_lastname.setText(cardPatient.getLast_name());
                                 editText_middle_name.setText(cardPatient.getMiddle_name());
                                 editText_date_birthday.setText(cardPatient.getDate_of_birth());
+                                if(cardPatient.getImage()!=null){
+                                    Glide.with(context).load(cardPatient.getImage()).into(profile_image);
+                                }
                                 spinner_gender.setSelection(Integer.valueOf(cardPatient.getPol()),false);
                                 btn_create_card.setEnabled(false);
+                                spinner_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        btn_create_card.setEnabled(true);
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
+
+                                    }
+                                });
                             }
                             else {
                                 Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show();
@@ -104,6 +138,13 @@ public class ProfileFragment extends Fragment implements TextWatcher {
         editText_lastname.addTextChangedListener(this);
         editText_middle_name.addTextChangedListener(this);
         editText_date_birthday.addTextChangedListener(this);
+
+        btn_create_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
             return view;
     }
 
