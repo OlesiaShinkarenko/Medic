@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"/>
     <Button
         android:textSize="15sp"
-        android:id="@+id/add_patient"
+        android:id="@+id/add_patient_patient_case"
         android:textColor="@color/button_true_enabled"
         android:textAllCaps="false"
         android:text="@string/add_patient_1"
@@ -53,7 +53,7 @@
         android:textSize="16sp"
         android:paddingVertical="16dp"
         android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/add_patient"
+        app:layout_constraintTop_toBottomOf="@id/add_patient_patient_case"
         android:layout_width="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/button_style"

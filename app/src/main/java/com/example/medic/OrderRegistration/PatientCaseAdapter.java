@@ -9,12 +9,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
+import com.example.medic.common.CardPatient;
+import com.example.medic.common.DBHandlerMedic;
 
 import java.util.List;
 
 public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.ViewHolder> {
 
-    List<String> patients;
+    List<CardPatient> patients;
     private int selectedPos = RecyclerView.NO_POSITION;
     Context context;
     OnItemsCheckStateListener checkStateListener;
@@ -25,9 +27,9 @@ public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.
     public void setOnItemsCheckStateListener(OnItemsCheckStateListener checkStateListener) {
         this.checkStateListener = checkStateListener;
     }
-    public PatientCaseAdapter(List<String> patients, Context context) {
-        this.patients = patients;
+    public PatientCaseAdapter(List<CardPatient>patients,Context context) {
         this.context = context;
+        this.patients = patients;
     }
 
     @Override
@@ -38,8 +40,8 @@ public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.
 
     @Override
     public void onBindViewHolder( ViewHolder holder, int position) {
-        String patient = patients.get(position);
-        holder.patient.setText(patient);
+        CardPatient patient = patients.get(position);
+        holder.patient.setText(patient.getFirst_name()+" "+patient.getLast_name());
         holder.itemView.setSelected(selectedPos == position);
         checkStateListener.onItemCheckStateChanged(selectedPos);
     }

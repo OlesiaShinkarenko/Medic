@@ -44,6 +44,23 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String LABEL_COL_ADDRESS = "label";
 
 
+    private static final String TABLE_NAME_ORDER = "order";
+    private static final String ID_COL_ORDER="id";
+    private static final String ADDRESS_COL_ORDER = "address";
+    private static final String DATE_COL_ORDER  = "date_time";
+    private static final String PHONE_COL_ORDER = "phone";
+    private static final String COMMENT_COL_ORDER = "comment";
+
+    private static final String TABLE_NAME_PATIENT_ORDER = "patient_in_order";
+    private static final String PATIENT_COL_PATIENT_ORDER = "patient";
+    private static final String ORDER_COL_PATIENT_ORDER = "id_order";
+
+    private static final String TABLE_NAME_ANALYSIS_IN_PATIENT = "analysis_in_patient";
+    private static final String ID_COL_ANALYSIS_IN_PATIENT = "id_analysis_in_patient";
+    private static final String PATIENT_IN_ORDER_COL_ANALYSIS_IN_PATIENT = "patient";
+    private static final String ANALYSIS_COL_ANALYSIS_IN_PATIENT = "analysis";
+
+
 
     public DBHandlerMedic(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -181,6 +198,22 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         cursor.close();
         return analyses;
     }
+    public ArrayList<CardPatient> readPatient(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_PATIENT,null);
+        ArrayList<CardPatient> patients = new ArrayList<>();
+        if(cursor.moveToFirst()){
+            do {
+                patients.add(new CardPatient(cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5)));
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return patients;
+    }
 
     public void addPatient(Integer analysis){
         SQLiteDatabase database = this.getWritableDatabase();
@@ -259,6 +292,8 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         c.close();
         return sum;
     }
+
+
 
     public void updatePatient(CardPatient cardPatient){
         SQLiteDatabase database = this.getWritableDatabase();

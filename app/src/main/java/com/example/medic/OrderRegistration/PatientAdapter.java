@@ -10,9 +10,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
+import com.example.medic.common.CardPatient;
+import com.example.medic.common.DBHandlerMedic;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -20,24 +23,32 @@ import java.util.List;
 
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHolder> {
 
-    List<String> patients;
+    List<CardPatient> patients = new ArrayList<>();
     private Context context;
+    List<CardPatient> patients1;
+    DBHandlerMedic dbHandlerMedic;
 
-    public PatientAdapter(List<String> patients, Context context) {
-        this.patients = patients;
+    public PatientAdapter(Context context) {
         this.context = context;
+        dbHandlerMedic = new DBHandlerMedic(context);
+        patients.add(dbHandlerMedic.readPatient().get(0));
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_patient,parent,false);
+    View view = LayoutInflater.from(context).inflate(R.layout.list_item_patient,parent,false);
         return new ViewHolder(view);
-    }
+}
 
     @Override
     public void onBindViewHolder( ViewHolder holder, int position) {
-        String patient = patients.get(position);
-        holder.who_analysis.setText(patient);
+        CardPatient patient = patients.get(position);
+        holder.who_analysis.setText(patient.getFirst_name()+" "+patient.getLast_name());
+        if(position!=0){
+            holder.delete.setVisibility(View.VISIBLE);
+            holder.recycler_view_analysis.setVisibility(View.VISIBLE);
+            holder.constraint.setBackground(context.getDrawable(R.drawable.patient_analysis));
+        }
     }
 
     @Override
@@ -46,12 +57,12 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        List<String> patients;
 
         private TextView who_analysis;
         private ImageButton delete;
         private RecyclerView recycler_view_analysis;
-        LinearLayout linearlayout;
+        Integer select;
+        ConstraintLayout constraint;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,15 +70,23 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
             who_analysis = itemView.findViewById(R.id.who_analysis);
             delete = itemView.findViewById(R.id.delete);
             recycler_view_analysis = itemView.findViewById(R.id.recycler_view_analysis);
-            linearlayout = itemView.findViewById(R.id.linearlayout);
+            constraint = itemView.findViewById(R.id.constraint);
 
             delete.setVisibility(View.GONE);
             recycler_view_analysis.setVisibility(View.GONE);
 
-            patients = new ArrayList<>();
-            patients.add("gdfhfg");
-            patients.add("w56yg");
-
+            PatientAnalysisAdapter patientAnalysisAdapter = new PatientAnalysisAdapter(context);
+            recycler_view_analysis.setAdapter(patientAnalysisAdapter);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int select = getAdapterPosition();
+                    if(select!=0){
+                        patients.remove(patients.get(select));
+                        notifyItemRemoved(select);
+                    }
+                }
+            });
             who_analysis.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -76,11 +95,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                     dialog.show();
                     Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                    RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
-                   PatientCaseAdapter adapter = new PatientCaseAdapter(patients, context);
+                    dbHandlerMedic = new DBHandlerMedic(context);
+                    patients1 = dbHandlerMedic.readPatient();
+                   PatientCaseAdapter adapter = new PatientCaseAdapter(patients1,context);
                    adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
                        @Override
                        public void onItemCheckStateChanged(int selectedPos) {
                            if(selectedPos!= RecyclerView.NO_POSITION){
+                               select = selectedPos;
                                button_add_patient.setEnabled(true);
                            }else{
                                button_add_patient.setEnabled(false);
@@ -91,11 +113,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                    dialog.findViewById(R.id.button_add_patient).setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
+                           int pos = getAdapterPosition();
                            dialog.dismiss();
                            delete.setVisibility(View.VISIBLE);
                            recycler_view_analysis.setVisibility(View.VISIBLE);
-                           linearlayout.setBackground(context.getDrawable(R.drawable.patient_analysis));
-                           who_analysis.setEnabled(false);
+                           constraint.setBackground(context.getDrawable(R.drawable.patient_analysis));
+                           patients.remove(pos);
+                           patients.add(pos,patients1.get(select));
+                           notifyDataSetChanged();
                        }
                    });
                 }

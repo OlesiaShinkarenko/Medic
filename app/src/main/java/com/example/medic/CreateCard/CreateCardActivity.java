@@ -78,6 +78,7 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
                 r.commit();
                 sp2= getSharedPreferences(SETTING_REFRESH,Context.MODE_PRIVATE);
 
+                boolean how = getIntent().getBooleanExtra("how",false);
 
                 CardPatient cardPatient = new CardPatient(editText_name.getText().toString(),
                         editText_lastname.getText().toString(),editText_surname.getText().toString(),
@@ -93,9 +94,11 @@ public class CreateCardActivity extends AppCompatActivity implements TextWatcher
                                     public void onResponse(Call<CardPatient> call, Response<CardPatient> response) {
                                         if(response.isSuccessful()){
                                             dbHandlerMedic.addCardPatient(response.body());
-                                            Intent i = new Intent(CreateCardActivity.this, MainScreenActivity.class);
-                                            startActivity(i);
-                                            finish();
+                                            if (how){
+                                                onBackPressed();
+                                            }else {
+                                                NextActivity();
+                                            }
                                         }
 
                                     }

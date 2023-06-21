@@ -39,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <EditText
+        android:focusable="false"
         android:drawableRight="@drawable/drop_down"
         android:background="@drawable/edittext_style"
         android:textColor="@color/black"

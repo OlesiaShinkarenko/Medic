@@ -1,11 +1,16 @@
 package com.example.medic.OrderRegistration;
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -14,24 +19,30 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medic.CreateCard.CreateCardActivity;
 import com.example.medic.R;
 import com.example.medic.common.Address;
+import com.example.medic.common.CardPatient;
 import com.example.medic.common.DBHandlerMedic;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderRegistrationActivity extends AppCompatActivity {
+public class OrderRegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     ImageButton btn_back;
+    Integer select;
     EditText edit_text_address, edit_text_datetime;
     RecyclerView who_analysis;
     BottomSheetDialog dialog;
+    EditText date;
     DBHandlerMedic dbHandlerMedic;
     Address address;
     Button add_patient;
-    List<String> patients;
+    ArrayList<CardPatient> patients;
+    ArrayList<CardPatient> patient_for_case = new ArrayList<>();
     List <String> timeList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +56,10 @@ public class OrderRegistrationActivity extends AppCompatActivity {
         add_patient = findViewById(R.id.add_patient);
 
         dbHandlerMedic = new DBHandlerMedic(this);
+        patients = dbHandlerMedic.readPatient();
+
+        patient_for_case = patients;
+        patient_for_case.remove(patients.get(0));
 
         timeList = new ArrayList<>();
 
@@ -61,9 +76,6 @@ public class OrderRegistrationActivity extends AppCompatActivity {
             address = dbHandlerMedic.getAddress();
             edit_text_address.setText(address.getAdd()+",кв. "+address.getFlat());
         }
-
-        patients = new ArrayList<>();
-        patients.add("kglfkg");
 
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,22 +175,25 @@ public class OrderRegistrationActivity extends AppCompatActivity {
             }
         });
 
+
+
         edit_text_datetime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog = new BottomSheetDialog(OrderRegistrationActivity.this);
                 dialog.setContentView(R.layout.date_time);
                 dialog.show();
+                RecyclerView recyclerView = dialog.findViewById(R.id.time_recycle_view);
+                Button button_con_date = dialog.findViewById(R.id.button_add);
+                recyclerView.setLayoutManager(new GridLayoutManager(OrderRegistrationActivity.this, 4));
+                TimeAdapter timeAdapter = new TimeAdapter(timeList,OrderRegistrationActivity.this);
                 dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
                     }
                 });
-                RecyclerView recyclerView = dialog.findViewById(R.id.time_recycle_view);
-                Button button_con_date = dialog.findViewById(R.id.button_add);
-                recyclerView.setLayoutManager(new GridLayoutManager(OrderRegistrationActivity.this, 4));
-                TimeAdapter timeAdapter = new TimeAdapter(timeList,OrderRegistrationActivity.this);
+
                 timeAdapter.setOnItemsCheckStateListener(new TimeAdapter.OnItemsCheckStateListener() {
                     @Override
                     public void onItemCheckStateChanged(int selectedPos) {
@@ -190,8 +205,15 @@ public class OrderRegistrationActivity extends AppCompatActivity {
                     }
                 });
                 recyclerView.setAdapter(timeAdapter);
+                button_con_date.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        edit_text_datetime.setText(date.getText().toString());
+                    }
+                });
 
-                EditText date = dialog.findViewById(R.id.date);
+                date = dialog.findViewById(R.id.date);
                 date.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -210,12 +232,19 @@ public class OrderRegistrationActivity extends AppCompatActivity {
                         }
                     }
                 });
+                date.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DataPicker dataPicker;
+                        dataPicker = new DataPicker();
+                        dataPicker.show(getSupportFragmentManager(),"DATE PICK");
+                    }
+                });
             }
         });
 
-        PatientAdapter patientAdapter = new PatientAdapter(patients,this);
+        PatientAdapter patientAdapter = new PatientAdapter(this);
         who_analysis.setAdapter(patientAdapter);
-
         add_patient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,19 +253,50 @@ public class OrderRegistrationActivity extends AppCompatActivity {
                 dialog.show();
                 Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                 RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
-                PatientCaseAdapter adapter = new PatientCaseAdapter(patients, OrderRegistrationActivity.this);
+                PatientCaseAdapter adapter = new PatientCaseAdapter(patient_for_case,OrderRegistrationActivity.this);
                 adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
                     @Override
                     public void onItemCheckStateChanged(int selectedPos) {
                         if(selectedPos!= RecyclerView.NO_POSITION){
+                            select = selectedPos;
                             button_add_patient.setEnabled(true);
+
                         }else{
                             button_add_patient.setEnabled(false);
                         }
                     }
                 });
                 recycle_view_patient.setAdapter(adapter);
+                Button add_patient_patient_case = dialog.findViewById(R.id.add_patient_patient_case);
+                add_patient_patient_case.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(OrderRegistrationActivity.this, CreateCardActivity.class);
+                        i.putExtra("how",true);
+                        startActivity(i);
+                    }
+                });
+                button_add_patient.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        patientAdapter.patients.add(patient_for_case.get(select));
+                        patient_for_case.remove(patient_for_case.get(select));
+                        adapter.notifyDataSetChanged();
+                        patientAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                    }
+                });
             }
         });
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+        String selectedDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
+        date.setText(selectedDate);
     }
 }
