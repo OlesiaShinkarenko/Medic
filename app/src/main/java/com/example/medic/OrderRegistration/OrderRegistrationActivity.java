@@ -6,7 +6,6 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -59,7 +58,6 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
         patients = dbHandlerMedic.readPatient();
 
         patient_for_case = patients;
-        patient_for_case.remove(patients.get(0));
 
         timeList = new ArrayList<>();
 
@@ -248,15 +246,19 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
         add_patient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //вызываем диалог добавления пациента
                 dialog = new BottomSheetDialog(OrderRegistrationActivity.this);
                 dialog.setContentView(R.layout.add_patient);
                 dialog.show();
                 Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                 RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
+
+                //добавляем ему адаптер
                 PatientCaseAdapter adapter = new PatientCaseAdapter(patient_for_case,OrderRegistrationActivity.this);
                 adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
                     @Override
                     public void onItemCheckStateChanged(int selectedPos) {
+                        //если ничего не выбрано, кнопка недоступна
                         if(selectedPos!= RecyclerView.NO_POSITION){
                             select = selectedPos;
                             button_add_patient.setEnabled(true);
@@ -268,6 +270,7 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 });
                 recycle_view_patient.setAdapter(adapter);
                 Button add_patient_patient_case = dialog.findViewById(R.id.add_patient_patient_case);
+                //добавляем переход к созданию карты, если выбрана кнопка "Добавить пациента"
                 add_patient_patient_case.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

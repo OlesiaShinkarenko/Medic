@@ -44,20 +44,21 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String LABEL_COL_ADDRESS = "label";
 
 
-    private static final String TABLE_NAME_ORDER = "order";
+    private static final String TABLE_NAME_ORDER = "order_table";
     private static final String ID_COL_ORDER="id";
     private static final String ADDRESS_COL_ORDER = "address";
     private static final String DATE_COL_ORDER  = "date_time";
     private static final String PHONE_COL_ORDER = "phone";
     private static final String COMMENT_COL_ORDER = "comment";
+    private static final String PATIENT_COL_ORDER = "patient_in_order";
 
-    private static final String TABLE_NAME_PATIENT_ORDER = "patient_in_order";
+    private static final String TABLE_NAME_PATIENT_ORDER = "patient_in_order_table";
+    private static final String ID_COL_PATIENT_ORDER = "patient_in_order";
     private static final String PATIENT_COL_PATIENT_ORDER = "patient";
-    private static final String ORDER_COL_PATIENT_ORDER = "id_order";
+    private static final String ANALYSIS_COL_PATIENT_ORDER = "analysis_patient_order";
 
     private static final String TABLE_NAME_ANALYSIS_IN_PATIENT = "analysis_in_patient";
     private static final String ID_COL_ANALYSIS_IN_PATIENT = "id_analysis_in_patient";
-    private static final String PATIENT_IN_ORDER_COL_ANALYSIS_IN_PATIENT = "patient";
     private static final String ANALYSIS_COL_ANALYSIS_IN_PATIENT = "analysis";
 
 
@@ -95,9 +96,31 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
                 +FLOOR_COL_ADDRESS + " TEXT,"
                 +DOORPHONE_COL_ADDRESS+" TEXT,"
                 +LABEL_COL_ADDRESS+ " TEXT)";
+
+        String query4 = "CREATE TABLE "+ TABLE_NAME_ORDER+ " ("
+                +ID_COL_ORDER+"INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +ADDRESS_COL_ORDER+ " TEXT,"
+                +DATE_COL_ORDER+ " TEXT,"
+                +PHONE_COL_ORDER+ " TEXT,"
+                +COMMENT_COL_ORDER+ " TEXT, "
+                +PATIENT_COL_ORDER+" TEXT)"
+                ;
+
+        String query5 = "CREATE TABLE "+TABLE_NAME_PATIENT_ORDER+" ("
+                +ID_COL_PATIENT_ORDER+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +"FOREIGN KEY(" + PATIENT_COL_PATIENT_ORDER+") REFERENCES " +
+                TABLE_NAME_PATIENT+ "("+ID_PATIENT_COL_PATIENT+"), "
+                +ANALYSIS_COL_PATIENT_ORDER +" TEXT)";
+
+        String query6 = "CREATE TABLE "+TABLE_NAME_ANALYSIS_IN_PATIENT +" ("
+                +ID_COL_ANALYSIS_IN_PATIENT+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +ANALYSIS_COL_ANALYSIS_IN_PATIENT + " INTEGER)";
         db.execSQL(query);
         db.execSQL(query2);
         db.execSQL(query3);
+        db.execSQL(query4);
+        db.execSQL(query5);
+        db.execSQL(query6);
     }
 
     public void addAddress(Address address){
