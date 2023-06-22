@@ -1,12 +1,10 @@
 package com.example.medic.OrderRegistration;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -19,7 +17,6 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.medic.CreateCard.CreateCardActivity;
 import com.example.medic.R;
 import com.example.medic.common.Address;
 import com.example.medic.common.CardPatient;
@@ -32,17 +29,16 @@ import java.util.List;
 
 public class OrderRegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
-    ImageButton btn_back;
-    Integer select;
-    EditText edit_text_address, edit_text_datetime;
-    RecyclerView who_analysis;
-    BottomSheetDialog dialog;
-    EditText date;
-    DBHandlerMedic dbHandlerMedic;
-    Address address;
-    Button add_patient;
-    ArrayList<CardPatient> patients;
-    List <String> timeList;
+   private ImageButton btn_back;
+    private EditText edit_text_address, edit_text_datetime,date;
+    private RecyclerView who_analysis;
+    private BottomSheetDialog dialog;
+
+    private DBHandlerMedic dbHandlerMedic;
+    private Address address;
+   private Button add_patient;
+   private ArrayList<CardPatient> patients;
+    private List <String> timeList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,9 +240,10 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
             }
         });
 
-        PatientAdapter patientAdapter = new PatientAdapter(this);
-        who_analysis.setAdapter(patientAdapter);
-        add_patient.setOnClickListener(new View.OnClickListener() {
+        who_analysis.
+
+
+        /* add_patient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //вызываем диалог добавления пациента
@@ -256,30 +253,7 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                 RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
 
-                List<CardPatient> patient_for_case = new ArrayList<>();
-                for (CardPatient cardPatient:patients){
-                    if(!dbHandlerMedic.PatientExists(cardPatient.getId())){
-                        patient_for_case.add(cardPatient);
-                        Log.d("pat",cardPatient.getLast_name());
-                    }
-                }
 
-                //добавляем ему адаптер
-                PatientCaseAdapter adapter = new PatientCaseAdapter(patient_for_case,OrderRegistrationActivity.this);
-                adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
-                    @Override
-                    public void onItemCheckStateChanged(int selectedPos) {
-                        //если ничего не выбрано, кнопка недоступна
-                        select = selectedPos;
-                        if(selectedPos!= RecyclerView.NO_POSITION){
-                            button_add_patient.setEnabled(true);
-
-                        }else{
-                            button_add_patient.setEnabled(false);
-                        }
-                    }
-                });
-                recycle_view_patient.setAdapter(adapter);
                 Button add_patient_patient_case = dialog.findViewById(R.id.add_patient_patient_case);
                 //добавляем переход к созданию карты, если выбрана кнопка "Добавить пациента"
                 add_patient_patient_case.setOnClickListener(new View.OnClickListener() {
@@ -293,11 +267,13 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 button_add_patient.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        dialog.dismiss();
+                       dialog.dismiss();
                     }
                 });
             }
         });
+
+         */
     }
 
     @Override

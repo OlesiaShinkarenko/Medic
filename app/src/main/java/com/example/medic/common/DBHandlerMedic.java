@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -210,7 +209,7 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         return address;
     }
 
-    public void addPatientInOrder(Integer patient_id){
+    public void AddPatientInOrder(Integer patient_id){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -219,10 +218,15 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.insert(TABLE_NAME_PATIENT_ORDER,null,contentValues);
         database.close();
     }
+    public void DeletePatientInOrder(Integer patient_id){
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.delete(TABLE_NAME_PATIENT_ORDER,PATIENT_COL_PATIENT_ORDER+ " =?", new String[]{String.valueOf(patient_id)});
+        database.close();
+    }
 
    public boolean PatientAlreadyInOrder(Integer id_patient){
        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-       Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_PATIENT_ORDER +" WHERE id_patient_in_order ="+ id_patient,null);
+       Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_PATIENT_ORDER +" WHERE patient_in_order ="+ id_patient +" & "+ORDER_COL_PATIENT_ORDER+ " = "+ getLastIndexOrder(),null);
        boolean exists = (cursor.getCount()>0);
        return exists;
    }
@@ -302,11 +306,14 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         ArrayList<CardPatient> patients = new ArrayList<>();
         if(cursor.moveToFirst()){
             do {
-                patients.add(new CardPatient(cursor.getString(1),
+                patients.add(new CardPatient(
+                        cursor.getInt(0),
+                        cursor.getString(1),
                         cursor.getString(2),
                         cursor.getString(3),
                         cursor.getString(4),
-                        cursor.getString(5)));
+                        cursor.getString(5),
+                        cursor.getString(6)));
             }while (cursor.moveToNext());
         }
         cursor.close();
