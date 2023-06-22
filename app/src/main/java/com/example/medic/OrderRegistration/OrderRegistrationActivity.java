@@ -41,7 +41,6 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
     Address address;
     Button add_patient;
     ArrayList<CardPatient> patients;
-    ArrayList<CardPatient> patient_for_case = new ArrayList<>();
     List <String> timeList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +54,9 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
         add_patient = findViewById(R.id.add_patient);
 
         dbHandlerMedic = new DBHandlerMedic(this);
+
         patients = dbHandlerMedic.readPatient();
 
-        patient_for_case = patients;
 
         timeList = new ArrayList<>();
 
@@ -69,6 +68,7 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
         timeList.add("16:00");
         timeList.add("17:00");
 
+        dbHandlerMedic.addOrder();
 
         if(dbHandlerMedic.AddressExist()){
             address = dbHandlerMedic.getAddress();
@@ -126,6 +126,7 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                          }
                         dialog.dismiss();
                         edit_text_address.setText(address.getAdd()+",кв. "+address.getFlat());
+                        dbHandlerMedic.setOrderAddress(edit_text_address.getText().toString());
                     }
                 });
 
@@ -208,6 +209,7 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                     public void onClick(View view) {
                         dialog.dismiss();
                         edit_text_datetime.setText(date.getText().toString());
+                        dbHandlerMedic.setDateTimeOrder(edit_text_datetime.getText().toString());
                     }
                 });
 
@@ -252,9 +254,14 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 dialog.show();
                 Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                 RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
-
+                List<CardPatient> patients1 =new ArrayList<>();
+                for(CardPatient cardPatient:patients){
+                    if(!dbHandlerMedic.PatientAlreadyInOrder(cardPatient.getId())){
+                        patients1.add(cardPatient);
+                    }
+                }
                 //добавляем ему адаптер
-                PatientCaseAdapter adapter = new PatientCaseAdapter(patient_for_case,OrderRegistrationActivity.this);
+                PatientCaseAdapter adapter = new PatientCaseAdapter(patients,OrderRegistrationActivity.this);
                 adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
                     @Override
                     public void onItemCheckStateChanged(int selectedPos) {
@@ -282,8 +289,6 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 button_add_patient.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        patientAdapter.patients.add(patient_for_case.get(select));
-                        patient_for_case.remove(patient_for_case.get(select));
                         adapter.notifyDataSetChanged();
                         patientAdapter.notifyDataSetChanged();
                         dialog.dismiss();

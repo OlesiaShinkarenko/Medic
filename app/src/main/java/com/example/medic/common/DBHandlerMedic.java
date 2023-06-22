@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -50,16 +51,21 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String DATE_COL_ORDER  = "date_time";
     private static final String PHONE_COL_ORDER = "phone";
     private static final String COMMENT_COL_ORDER = "comment";
-    private static final String PATIENT_COL_ORDER = "patient_in_order";
+
+
 
     private static final String TABLE_NAME_PATIENT_ORDER = "patient_in_order_table";
-    private static final String ID_COL_PATIENT_ORDER = "patient_in_order";
-    private static final String PATIENT_COL_PATIENT_ORDER = "patient";
-    private static final String ANALYSIS_COL_PATIENT_ORDER = "analysis_patient_order";
+    private static final String ID_COL_PATIENT_ORDER = "id_patient_in_order";
+    private static final String PATIENT_COL_PATIENT_ORDER = "patient_in_order";
+    private static final String ORDER_COL_PATIENT_ORDER = "order_i";
+
 
     private static final String TABLE_NAME_ANALYSIS_IN_PATIENT = "analysis_in_patient";
     private static final String ID_COL_ANALYSIS_IN_PATIENT = "id_analysis_in_patient";
+    private static final String PATIENT_IN_ORDER_COL_ANALYSIS_IN_PATIENT = "for_patient_in_order";
     private static final String ANALYSIS_COL_ANALYSIS_IN_PATIENT = "analysis";
+
+   // private static final String PRICE_COL_ANALYSIS_IN_PATIENT= "price_analysis_in_order";
 
 
 
@@ -77,8 +83,9 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
                 + TIME_RESULT_COL_BASKET + " TEXT,"
                 + PREPARATION_COL_BASKET + " TEXT,"
                 + BIO_COL_BASKET + " TEXT,"
-                + NUMBER_COL_BASKET + " INTEGER DEFAULT 1)"
-                ;
+                + NUMBER_COL_BASKET + " INTEGER DEFAULT 1)";
+
+        //БД для хранения данных о пользователе
         String query2 = "CREATE TABLE "+TABLE_NAME_PATIENT+" ("
                 +ID_PATIENT_COL_PATIENT+" INTEGER, "
                 +FIRST_NAME_COL_PATIENT+" TEXT, "
@@ -98,23 +105,29 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
                 +LABEL_COL_ADDRESS+ " TEXT)";
 
         String query4 = "CREATE TABLE "+ TABLE_NAME_ORDER+ " ("
-                +ID_COL_ORDER+"INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +ID_COL_ORDER+" INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +ADDRESS_COL_ORDER+ " TEXT,"
                 +DATE_COL_ORDER+ " TEXT,"
                 +PHONE_COL_ORDER+ " TEXT,"
-                +COMMENT_COL_ORDER+ " TEXT, "
-                +PATIENT_COL_ORDER+" TEXT)"
-                ;
+                +COMMENT_COL_ORDER+ " TEXT)";
 
         String query5 = "CREATE TABLE "+TABLE_NAME_PATIENT_ORDER+" ("
-                +ID_COL_PATIENT_ORDER+" INTEGER PRIMARY KEY AUTOINCREMENT,"
-                +"FOREIGN KEY(" + PATIENT_COL_PATIENT_ORDER+") REFERENCES " +
-                TABLE_NAME_PATIENT+ "("+ID_PATIENT_COL_PATIENT+"), "
-                +ANALYSIS_COL_PATIENT_ORDER +" TEXT)";
+                +ID_COL_PATIENT_ORDER+" INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +ORDER_COL_PATIENT_ORDER +" INTEGER, "
+                +PATIENT_COL_PATIENT_ORDER+ " INTEGER, "
+                +"FOREIGN KEY (" + PATIENT_COL_PATIENT_ORDER+") REFERENCES " +
+                TABLE_NAME_PATIENT+ "("+ID_COL_ANALYSIS_IN_PATIENT+"), "
+                +"FOREIGN KEY (" + ORDER_COL_PATIENT_ORDER+") REFERENCES " +
+                TABLE_NAME_ORDER+ "("+ID_COL_ORDER+") )"
+                ;
 
         String query6 = "CREATE TABLE "+TABLE_NAME_ANALYSIS_IN_PATIENT +" ("
                 +ID_COL_ANALYSIS_IN_PATIENT+ " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                +ANALYSIS_COL_ANALYSIS_IN_PATIENT + " INTEGER)";
+                +ANALYSIS_COL_ANALYSIS_IN_PATIENT + " INTEGER, "
+                +PATIENT_IN_ORDER_COL_ANALYSIS_IN_PATIENT+ " INTEGER, "
+                + "FOREIGN KEY (" + PATIENT_IN_ORDER_COL_ANALYSIS_IN_PATIENT+") REFERENCES " +
+                TABLE_NAME_PATIENT_ORDER+ "("+ID_COL_PATIENT_ORDER+") )"
+                ;
         db.execSQL(query);
         db.execSQL(query2);
         db.execSQL(query3);
@@ -138,6 +151,46 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.close();
     }
 
+    public void addOrder(){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ADDRESS_COL_ORDER,"");
+        contentValues.put(DATE_COL_ORDER,"");
+        contentValues.put(PHONE_COL_ORDER,"");
+        contentValues.put(COMMENT_COL_ORDER,"");
+        contentValues.put(ADDRESS_COL_ORDER,"");
+
+        database.insert(TABLE_NAME_ORDER,null,contentValues);
+        database.close();
+    }
+    public void setOrderAddress(String address){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ADDRESS_COL_ORDER,address);
+        database.update(TABLE_NAME_ORDER,contentValues,"id = "+getLastIndexOrder(),null);
+        database.close();
+    }
+
+    public void setDateTimeOrder(String dateTimeOrder){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ADDRESS_COL_ORDER,dateTimeOrder);
+        database.update(TABLE_NAME_ORDER,contentValues,"id = "+getLastIndexOrder(),null);
+        database.close();
+    }
+
+    public int getLastIndexOrder(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT MAX("+ID_COL_ORDER+") FROM " + TABLE_NAME_ORDER, null);
+        c.moveToFirst();
+        int id = c.getInt(0);
+        c.close();
+        return id;
+    }
+
     public boolean AddressExist(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_ADDRESS,null);
@@ -157,6 +210,23 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         return address;
     }
 
+    public void addPatientInOrder(Integer patient_id){
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ORDER_COL_PATIENT_ORDER,getLastIndexOrder());
+        contentValues.put(PATIENT_COL_PATIENT_ORDER, patient_id);
+        database.insert(TABLE_NAME_PATIENT_ORDER,null,contentValues);
+        database.close();
+    }
+
+   public boolean PatientAlreadyInOrder(Integer id_patient){
+       SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+       Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_PATIENT_ORDER +" WHERE id_patient_in_order ="+ id_patient,null);
+       boolean exists = (cursor.getCount()>0);
+       return exists;
+   }
+
     public void addAnalysis(Analysis analysis){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -172,6 +242,8 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.insert(TABLE_NAME_BASKET,null,contentValues);
         database.close();
     }
+
+    //метод для добавления карточки пациента
    public void addCardPatient(CardPatient cardPatient){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -187,8 +259,7 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         database.close();
     }
 
-
-
+    //метод для показа профиля (id для запроса на сервер)
     public Integer getCardPatientId(){
         int id = -1;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
@@ -202,6 +273,8 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         }
         return id;
     }
+
+    //метод для получения списка анализов
     public ArrayList<Analysis> readAnalysis(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_BASKET,null);
@@ -221,6 +294,8 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         cursor.close();
         return analyses;
     }
+
+
     public ArrayList<CardPatient> readPatient(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+ TABLE_NAME_PATIENT,null);

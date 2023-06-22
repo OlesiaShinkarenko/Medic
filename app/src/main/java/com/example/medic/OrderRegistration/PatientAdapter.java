@@ -31,6 +31,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
     public PatientAdapter(Context context) {
         this.context = context;
         dbHandlerMedic = new DBHandlerMedic(context);
+        //присваеваем первое значение (профиль) в исходный "Кто будет сдавать анализы? "
         patients.add(dbHandlerMedic.readPatient().get(0));
     }
 
@@ -45,10 +46,12 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
         CardPatient patient = patients.get(position);
         holder.who_analysis.setText(patient.getFirst_name()+" "+patient.getLast_name());
         if(position!=0){
+            //если позиция не нулевая, меняем вид
             holder.delete.setVisibility(View.VISIBLE);
             holder.recycler_view_analysis.setVisibility(View.VISIBLE);
             holder.constraint.setBackground(context.getDrawable(R.drawable.patient_analysis));
         }
+
     }
 
     @Override
@@ -81,7 +84,8 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     int select = getAdapterPosition();
-                    if(select!=0){
+                    if(patients.size()>1){
+                        //удаляем элемент. по которому нажали
                         patients.remove(patients.get(select));
                         notifyItemRemoved(select);
                     }
@@ -90,14 +94,17 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
             who_analysis.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //открываем диалог
                     BottomSheetDialog dialog = new BottomSheetDialog(context);
                     dialog.setContentView(R.layout.add_patient);
                     dialog.show();
+
                     Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                    RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
-                    dbHandlerMedic = new DBHandlerMedic(context);
-                    patients1 = dbHandlerMedic.readPatient();
-                   PatientCaseAdapter adapter = new PatientCaseAdapter(patients1,context);
+
+                    //окно появляется по клику на любой элемент "Кто будет сдавать анализы? "
+
+                   PatientCaseAdapter adapter = new PatientCaseAdapter(patients,context);
                    adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
                        @Override
                        public void onItemCheckStateChanged(int selectedPos) {
@@ -113,13 +120,17 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                    dialog.findViewById(R.id.button_add_patient).setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
-                           int pos = getAdapterPosition();
                            dialog.dismiss();
                            delete.setVisibility(View.VISIBLE);
                            recycler_view_analysis.setVisibility(View.VISIBLE);
                            constraint.setBackground(context.getDrawable(R.drawable.patient_analysis));
-                           patients.remove(pos);
-                           patients.add(pos,patients1.get(select));
+                           //замена значений
+                           if(patients.size()>1){
+                               patients.remove(patients.get(select));
+                           }else {
+                               patients.clear();
+                           }
+                           patients.add(dbHandlerMedic.readPatient().get(select));
                            notifyDataSetChanged();
                        }
                    });
