@@ -50,7 +50,6 @@ public class BasketActivity extends AppCompatActivity {
             @Override
             public void onItemCheckStateChanged() {
                 SetSum();
-
             }
         });
         recycler_view_basket.setAdapter(adapter);

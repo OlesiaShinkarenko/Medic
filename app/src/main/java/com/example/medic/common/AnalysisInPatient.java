@@ -1,6 +1,10 @@
 package com.example.medic.common;
 
-public class AnalysisInPatient {
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class AnalysisInPatient implements Serializable {
+    @SerializedName("analysis")
     private Integer analysis;
-    private String name;
 }

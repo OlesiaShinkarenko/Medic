@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
 import com.example.medic.common.CardPatient;
-import com.example.medic.common.DBHandlerMedic;
 
 import java.util.List;
 
@@ -43,7 +42,6 @@ public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.
         CardPatient patient = patients.get(position);
         holder.patient.setText(patient.getFirst_name()+" "+patient.getLast_name());
         holder.itemView.setSelected(selectedPos == position);
-        checkStateListener.onItemCheckStateChanged(selectedPos);
     }
 
 
@@ -67,6 +65,7 @@ public class PatientCaseAdapter extends RecyclerView.Adapter<PatientCaseAdapter.
             notifyItemChanged(selectedPos);
             selectedPos = getLayoutPosition();
             notifyItemChanged(selectedPos);
+            checkStateListener.onItemCheckStateChanged(selectedPos);
         }
     }
 }

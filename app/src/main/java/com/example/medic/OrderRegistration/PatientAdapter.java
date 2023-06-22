@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -25,12 +24,12 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
 
     List<CardPatient> patients = new ArrayList<>();
     private Context context;
-    List<CardPatient> patients1;
     DBHandlerMedic dbHandlerMedic;
 
     public PatientAdapter(Context context) {
         this.context = context;
         dbHandlerMedic = new DBHandlerMedic(context);
+        //присваеваем первое значение (профиль) в исходный "Кто будет сдавать анализы? "
         patients.add(dbHandlerMedic.readPatient().get(0));
     }
 
@@ -41,14 +40,16 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
 }
 
     @Override
-    public void onBindViewHolder( ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         CardPatient patient = patients.get(position);
         holder.who_analysis.setText(patient.getFirst_name()+" "+patient.getLast_name());
         if(position!=0){
+            //если позиция не нулевая, меняем вид
             holder.delete.setVisibility(View.VISIBLE);
             holder.recycler_view_analysis.setVisibility(View.VISIBLE);
             holder.constraint.setBackground(context.getDrawable(R.drawable.patient_analysis));
         }
+
     }
 
     @Override
@@ -81,23 +82,35 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                 @Override
                 public void onClick(View view) {
                     int select = getAdapterPosition();
-                    if(select!=0){
-                        patients.remove(patients.get(select));
-                        notifyItemRemoved(select);
-                    }
                 }
             });
             who_analysis.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //открываем диалог, кто будет сдавать анализы на элементе
                     BottomSheetDialog dialog = new BottomSheetDialog(context);
                     dialog.setContentView(R.layout.add_patient);
                     dialog.show();
+
                     Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                    RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
-                    dbHandlerMedic = new DBHandlerMedic(context);
-                    patients1 = dbHandlerMedic.readPatient();
-                   PatientCaseAdapter adapter = new PatientCaseAdapter(patients1,context);
+
+
+                    //окно появляется по клику на любой элемент "Кто будет сдавать анализы? "
+                    //patients - список пациентов, который будет здесь отражаться
+                    //нужно после выбора добавить в бд
+                    //берем весь список из бд, и смотрим какие не добавлены в заказ
+
+
+                    List<CardPatient> patientAllListForRecyclerInCase = dbHandlerMedic.readPatient();
+                    List<CardPatient> patient_for_case = new ArrayList<>();
+                    for (CardPatient cardPatient:patientAllListForRecyclerInCase){
+                        if(!dbHandlerMedic.PatientExists(cardPatient.getId())){
+                            patient_for_case.add(cardPatient);
+                            Log.d("pat",cardPatient.getLast_name());
+                        }
+                    }
+                   PatientCaseAdapter adapter = new PatientCaseAdapter(patient_for_case,context);
                    adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
                        @Override
                        public void onItemCheckStateChanged(int selectedPos) {
@@ -113,15 +126,11 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.ViewHold
                    dialog.findViewById(R.id.button_add_patient).setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
-                           int pos = getAdapterPosition();
                            dialog.dismiss();
                            delete.setVisibility(View.VISIBLE);
                            recycler_view_analysis.setVisibility(View.VISIBLE);
                            constraint.setBackground(context.getDrawable(R.drawable.patient_analysis));
-                           patients.remove(pos);
-                           patients.add(pos,patients1.get(select));
-                           notifyDataSetChanged();
-                       }
+                   }
                    });
                 }
             });
