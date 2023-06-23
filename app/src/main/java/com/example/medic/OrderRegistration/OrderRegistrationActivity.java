@@ -240,7 +240,6 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
             }
         });
 
-        who_analysis.
 
 
         /* add_patient.setOnClickListener(new View.OnClickListener() {
