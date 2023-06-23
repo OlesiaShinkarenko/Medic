@@ -1,9 +1,11 @@
 package com.example.medic.SearchActivity;
 
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,19 +13,23 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.medic.MainScreen.MainScreenActivity;
 import com.example.medic.R;
 import com.example.medic.common.Analysis;
+import com.example.medic.common.AnalysisResult;
+import com.example.medic.common.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity {
 
     TextView cancel;
 
     RecyclerView search_result;
-    List<Analysis> analyses;
     List<Analysis> filterList= new ArrayList<>();
 
     EditText search_edit_text;
@@ -39,7 +45,6 @@ public class SearchActivity extends AppCompatActivity {
 
         search_edit_text = findViewById(R.id.search_edit_text);
 
-        analyses = (ArrayList)getIntent().getSerializableExtra("analysis");
 
         search_edit_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,7 +62,14 @@ public class SearchActivity extends AppCompatActivity {
                     }else {
                         Filter(s.toString());
                     }
+                }else {
+                    filterList.clear();
+                    SearchAnalysisAdapter adapter = new SearchAnalysisAdapter(filterList,SearchActivity.this,s.toString());
+                    search_result.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }
+
+
 
             }
 
@@ -77,14 +89,45 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void Filter(String text) {
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    RetrofitClient.getRetrofitClient().searchAnalyses(search_edit_text.getText().toString()).enqueue(new Callback<AnalysisResult>() {
+                        @Override
+                        public void onResponse(Call<AnalysisResult> call, Response<AnalysisResult> response) {
+                            if(response.isSuccessful()){
+                                filterList = response.body().getAnalyses();
+                                Log.d(filterList.get(0).getName(),filterList.get(0).getName());
+                                SearchAnalysisAdapter adapter = new SearchAnalysisAdapter(filterList,SearchActivity.this,text);
+                                search_result.setAdapter(adapter);
+                                adapter.notifyDataSetChanged();
+                            }else {
+                                callAlertDialog(response.message());
+                            }
+                        }
 
-        for(Analysis analysis:analyses){
-            if(analysis.getName().contains(text)){
-                filterList.add(analysis);
-            }
+                        @Override
+                        public void onFailure(Call<AnalysisResult> call, Throwable t) {
+                            callAlertDialog(t.getMessage());
+                        }
+                    });
+                }
+            }).start();
+        }catch (Exception e){
+            callAlertDialog(e.getMessage());
         }
-        SearchAnalysisAdapter adapter = new SearchAnalysisAdapter(filterList,SearchActivity.this,text);
-        search_result.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
+    }
+    private void callAlertDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(SearchActivity.this);
+        builder.setTitle("Ошибка!")
+                .setMessage(message)
+                .setIcon(R.mipmap.ic_launcher)
+                .setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Закрываем диалоговое окно
+                        dialog.cancel();
+                    }});
     }
 }
