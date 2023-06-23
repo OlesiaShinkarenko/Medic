@@ -1,6 +1,8 @@
 package com.example.medic.AnalysisFragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,26 +39,25 @@ import retrofit2.Response;
 
 public class AnalysisFragment extends Fragment   {
 
-    List<DiscountAndNews> discountAndNews ;
-    List<Analysis> analysis_in_categories;
+    private List<DiscountAndNews> discountAndNews;
+    private List<Analysis> analysis_in_categories;
 
-    NestedScrollView scrollview;
-    RelativeLayout basket_relativelayout;
-    CategoriesAdapter categoriesAdapter;
+    private NestedScrollView scrollview;
+    private RelativeLayout basket_relativelayout;
+    private CategoriesAdapter categoriesAdapter;
 
-    SwipeRefreshLayout swipe_refresh_layout;
-    List<Categories> categories;
-    static List<Analysis> analyses= new ArrayList<>();
-    static List<Analysis> fullanalyses= new ArrayList<>();
-    LinearLayout in_basket;
-    EditText search_analysis;
-    RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
-    DiscountAdapter discountAdapter;
-    AnalysisAdapter analysisAdapter;
-    String substitutedString;
-    TextView discount_and_news, catalog_analysis , sum_basket;
-    DBHandlerMedic dbHandlerMedic;
-
+    private SwipeRefreshLayout swipe_refresh_layout;
+    private List<Categories> categories;
+    private static List<Analysis> analyses= new ArrayList<>();
+    private static List<Analysis> fullanalyses= new ArrayList<>();
+    private LinearLayout in_basket;
+    private EditText search_analysis;
+    private RecyclerView recycle_view_banners, recycle_view_catalog_name, recycle_view_catalog;
+    private DiscountAdapter discountAdapter;
+    private AnalysisAdapter analysisAdapter;
+    private String substitutedString;
+    private TextView discount_and_news, catalog_analysis , sum_basket;
+    private DBHandlerMedic dbHandlerMedic;
     private Context context;
 
 
@@ -98,25 +99,6 @@ public class AnalysisFragment extends Fragment   {
         setData();
         dbHandlerMedic = new DBHandlerMedic(context);
         setSum_basket();
-        /*
-        scrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY>recycle_view_banners.getScrollY()){
-                    discount_and_news.setVisibility(View.GONE);
-                    recycle_view_banners.setVisibility(View.GONE);
-                    catalog_analysis.setVisibility(View.INVISIBLE);
-                    basket_relativelayout.setVisibility(View.VISIBLE);
-                }else {
-                    discount_and_news.setVisibility(View.VISIBLE);
-                    recycle_view_banners.setVisibility(View.VISIBLE);
-                    catalog_analysis.setVisibility(View.VISIBLE);
-                    basket_relativelayout.setVisibility(View.GONE);
-                }
-            }
-
-        });
-         */
 
         in_basket.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,74 +120,104 @@ public class AnalysisFragment extends Fragment   {
                    RetrofitClient.getRetrofitClient().getAnalyses().enqueue(new Callback<AnalysisResult>() {
                        @Override
                        public void onResponse(Call<AnalysisResult> call, Response<AnalysisResult> response) {
+                           if(response.isSuccessful()){
                                analyses = response.body().getAnalyses();
                                fullanalyses = new ArrayList<>();
-                           fullanalyses.addAll(analyses);
-                           analysisAdapter = new AnalysisAdapter(analyses,context);
-                           analysisAdapter.setOnItemsCheckStateListener(new AnalysisAdapter.OnItemsCheckStateListener(){
+                               fullanalyses.addAll(analyses);
+                               analysisAdapter = new AnalysisAdapter(analyses,context);
+                               analysisAdapter.setOnItemsCheckStateListener(new AnalysisAdapter.OnItemsCheckStateListener(){
 
-                               @Override
-                               public void onItemCheckStateChanged() {
-                                   setSum_basket();
-                               }
-                           });
-                           recycle_view_catalog.setAdapter(analysisAdapter);
-                       }
+                                   @Override
+                                   public void onItemCheckStateChanged() {
+                                       setSum_basket();
+                                   }
+                               });
+                               recycle_view_catalog.setAdapter(analysisAdapter);
+                           }else {
+                               callAlertDialog(response.message());
+                           }
+                           }
+
                        @Override
                        public void onFailure(Call<AnalysisResult> call, Throwable t) {
+                           callAlertDialog(t.getMessage());
                        }
                    });
 
                    RetrofitClient.getRetrofitClient().getCategories().enqueue(new Callback<CategoriesResult>() {
                        @Override
                        public void onResponse(Call<CategoriesResult> call, Response<CategoriesResult> response) {
-                           categories = response.body().getCategories();
-                           categoriesAdapter = new CategoriesAdapter(categories, context);
-                           categoriesAdapter.setOnItemsCheckStateListener(new CategoriesAdapter.OnItemsCheckStateListener() {
-                               @Override
-                               public void onItemCheckStateChanged(int category) {
-                                   if (category != -1 && analyses != null) {
-                                       analyses.clear();
-                                       analyses.addAll(fullanalyses);
-                                       analysis_in_categories = new ArrayList<>();
-                                       for (Analysis analysis : analyses) {
-                                           if (analysis.getCategory() == category) {
-                                               analysis_in_categories.add(analysis);
+                           if(response.isSuccessful()){
+                               categories = response.body().getCategories();
+                               categoriesAdapter = new CategoriesAdapter(categories, context);
+                               categoriesAdapter.setOnItemsCheckStateListener(new CategoriesAdapter.OnItemsCheckStateListener() {
+                                   @Override
+                                   public void onItemCheckStateChanged(int category) {
+                                       if (category != -1 && analyses != null) {
+                                           analyses.clear();
+                                           analyses.addAll(fullanalyses);
+                                           analysis_in_categories = new ArrayList<>();
+                                           for (Analysis analysis : analyses) {
+                                               if (analysis.getCategory() == category) {
+                                                   analysis_in_categories.add(analysis);
+                                               }
                                            }
+                                           analyses.clear();
+                                           analyses.addAll(analysis_in_categories);
+                                           analysisAdapter.notifyDataSetChanged();
                                        }
-                                       analyses.clear();
-                                       analyses.addAll(analysis_in_categories);
-                                    analysisAdapter.notifyDataSetChanged();
                                    }
-                               }
-                           });
-                           recycle_view_catalog_name.setAdapter(categoriesAdapter);
+                               });
+                               recycle_view_catalog_name.setAdapter(categoriesAdapter);
+                           }else {
+                               callAlertDialog(response.message());
+                           }
                        }
 
                        @Override
                        public void onFailure(Call<CategoriesResult> call, Throwable t) {
-
+                           callAlertDialog(t.getMessage());
                        }
                    });
                }catch (Exception e){
+                   callAlertDialog(e.getMessage());
                }
+               try {
+                   RetrofitClient.getRetrofitClient().getNews().enqueue(new Callback<NewsResult>() {
+                       @Override
+                       public void onResponse(Call<NewsResult> call, Response<NewsResult> response) {
+                           if(response.isSuccessful()){
+                               discountAndNews = response.body().getResults();
+                               discountAdapter = new DiscountAdapter(discountAndNews,context);
+                               recycle_view_banners.setAdapter(discountAdapter);
+                           }else{
+                               callAlertDialog(response.message());
+                           }
 
-               RetrofitClient.getRetrofitClient().getNews().enqueue(new Callback<NewsResult>() {
-                   @Override
-                   public void onResponse(Call<NewsResult> call, Response<NewsResult> response) {
-                       discountAndNews = response.body().getResults();
-                       discountAdapter = new DiscountAdapter(discountAndNews,context);
-                       recycle_view_banners.setAdapter(discountAdapter);
-                   }
+                       }
 
-                   @Override
-                   public void onFailure(Call<NewsResult> call, Throwable t) {
-
-                   }
-               });
+                       @Override
+                       public void onFailure(Call<NewsResult> call, Throwable t) {
+                           callAlertDialog(t.getMessage());
+                       }
+                   });
+               }catch (Exception e){
+                   callAlertDialog(e.getMessage());
+               }
            }
        }).start();
+    }
 
+    private void callAlertDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Ошибка!")
+                .setMessage(message)
+                .setIcon(R.mipmap.ic_launcher)
+                .setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Закрываем диалоговое окно
+                        dialog.cancel();
+                    }});
     }
 
     private void setSum_basket(){

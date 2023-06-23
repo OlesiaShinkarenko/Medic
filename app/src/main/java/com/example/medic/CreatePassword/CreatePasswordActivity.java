@@ -1,6 +1,8 @@
 package com.example.medic.CreatePassword;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -172,43 +174,61 @@ public class CreatePasswordActivity extends AppCompatActivity implements View.On
                                 }
                             });
                         }else {
-                           RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<RefreshAccess>() {
-                               @Override
-                               public void onResponse(Call<RefreshAccess> call, Response<RefreshAccess> response) {
-                                   if (response.isSuccessful()){
-                                       refresh = response.body();
-                                       sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
-                                       SharedPreferences.Editor editor = sp3.edit();
-                                       editor.putString(ACCESS, refresh.getAccess());
-                                       editor.commit();
-                                       sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
-                                       SharedPreferences.Editor r = sp.edit();
-                                       r.putBoolean("hasSkipped",false);
-                                       r.commit();
-                                       i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
-                                       startActivity(i);
-                                       finish();
-                                   }
-                                  else if (response.code()==400){
-                                       Toast.makeText(CreatePasswordActivity.this,"Вы уже авторизированы!", Toast.LENGTH_SHORT).show();
-                                       sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
-                                       SharedPreferences.Editor r = sp.edit();
-                                       r.putBoolean("hasSkipped",false);
-                                       r.commit();
-                                       i = new Intent(CreatePasswordActivity.this,CreatePasswordActivity.class);
-                                       startActivity(i);
-                                       finish();
-                                   }
-                               }
-                               @Override
-                               public void onFailure(Call<RefreshAccess> call, Throwable t) {
-
-                               }
-                           });
+                            try {
+                                RetrofitClient.getRetrofitClient().SignUp(user).enqueue(new Callback<RefreshAccess>() {
+                                    @Override
+                                    public void onResponse(Call<RefreshAccess> call, Response<RefreshAccess> response) {
+                                        if (response.isSuccessful()){
+                                            refresh = response.body();
+                                            sp3 = getSharedPreferences(SETTING_ACCESS,Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sp3.edit();
+                                            editor.putString(ACCESS, refresh.getAccess());
+                                            editor.commit();
+                                            sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor r = sp.edit();
+                                            r.putBoolean("hasSkipped",false);
+                                            r.commit();
+                                            i = new Intent(CreatePasswordActivity.this, CreateCardActivity.class);
+                                            startActivity(i);
+                                            finish();
+                                        }
+                                        else if (response.code()==400){
+                                            Toast.makeText(CreatePasswordActivity.this,"Вы уже авторизированы!", Toast.LENGTH_SHORT).show();
+                                            sp = getSharedPreferences(MY_SETTINGS, Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor r = sp.edit();
+                                            r.putBoolean("hasSkipped",false);
+                                            r.commit();
+                                            i = new Intent(CreatePasswordActivity.this,CreatePasswordActivity.class);
+                                            startActivity(i);
+                                            finish();
+                                        }else {
+                                            callAlertDialog(response.message());
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(Call<RefreshAccess> call, Throwable t) {
+                                        callAlertDialog(t.getMessage());
+                                    }
+                                });
+                            }catch (Exception e){
+                                callAlertDialog(e.getMessage());
+                            }
                         }
                     }
                 }).start();
         }
+    }
+
+    private void callAlertDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreatePasswordActivity.this);
+        builder.setTitle("Ошибка!")
+                .setMessage(message)
+                .setIcon(R.mipmap.ic_launcher)
+                .setPositiveButton("Продолжить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Закрываем диалоговое окно
+                        dialog.cancel();
+                    }});
     }
 
     @Override
