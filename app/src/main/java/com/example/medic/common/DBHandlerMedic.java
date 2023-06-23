@@ -42,6 +42,9 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     private static final String FLOOR_COL_ADDRESS = "floor";
     private static final String DOORPHONE_COL_ADDRESS = "doorphone";
     private static final String LABEL_COL_ADDRESS = "label";
+    private static final String LONGITUDE_COL_ADDRESS = "longitude";
+    private static final String HEIGHT_COL_ADDRESS = "height";
+    private static final String WIDTH_COL_ADDRESS = "width";
 
 
     private static final String TABLE_NAME_ORDER = "order_table";
@@ -101,7 +104,11 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
                 +ENTRANCE_COL_ADDRESS + " TEXT,"
                 +FLOOR_COL_ADDRESS + " TEXT,"
                 +DOORPHONE_COL_ADDRESS+" TEXT,"
-                +LABEL_COL_ADDRESS+ " TEXT)";
+                +LABEL_COL_ADDRESS+ " TEXT, "
+                +LONGITUDE_COL_ADDRESS+ " TEXT, "
+                +HEIGHT_COL_ADDRESS+ " TEXT, "
+                +WIDTH_COL_ADDRESS+ " TEXT) "
+                ;
 
         String query4 = "CREATE TABLE "+ TABLE_NAME_ORDER+ " ("
                 +ID_COL_ORDER+" INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -145,6 +152,10 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         contentValues.put(FLOOR_COL_ADDRESS,address.getFloor());
         contentValues.put(DOORPHONE_COL_ADDRESS,address.getDoorphone());
         contentValues.put(LABEL_COL_ADDRESS,address.getLabel());
+        contentValues.put(LONGITUDE_COL_ADDRESS,address.getLongitude());
+        contentValues.put(HEIGHT_COL_ADDRESS,address.getHeight());
+        contentValues.put(WIDTH_COL_ADDRESS,address.getWidth());
+
 
         database.insert(TABLE_NAME_ADDRESS,null,contentValues);
         database.close();
@@ -203,7 +214,8 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
         if(cursor.moveToFirst()) {
             address = new Address(cursor.getString(1),cursor.getString(2),
                     cursor.getString(3),cursor.getString(4),cursor.getString(5),
-                    cursor.getString(6));
+                    cursor.getString(6),cursor.getString(7),cursor.getString(8),
+                    cursor.getString(9));
         }
         cursor.close();
         return address;

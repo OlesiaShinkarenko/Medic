@@ -108,6 +108,9 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                     entrance_address.setText(address.getEntrance());
                     floor_address.setText(address.getFloor());
                     edittext_doorphone.setText(address.getDoorphone());
+                    longitude_address.setText(address.getLongitude());
+                    height_address.setText(address.getHeight());
+                    width_address.setText(address.getWidth());
                 }
                 button_add.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -117,7 +120,10 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                                entrance_address.getText().toString(),
                                 floor_address.getText().toString(),
                                 edittext_doorphone.getText().toString(),
-                                edittext_address_save.getText().toString());
+                                edittext_address_save.getText().toString(),
+                                 longitude_address.getText().toString(),
+                                 height_address.getText().toString(),
+                                 width_address.getText().toString());
                          if(switch_save.isChecked()){
                              dbHandlerMedic.addAddress(address);
                          }
@@ -148,6 +154,9 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                         flat_address.getText().length()==0||
                         entrance_address.getText().length()==0||
                         floor_address.getText().length()==0
+                                ||longitude_address.getText().length() ==0||
+                                width_address.getText().length() ==0||
+                                height_address.getText().length() ==0
                                 ||edittext_doorphone.getText().length()==0){
                             button_add.setEnabled(false);
                         }else{
