@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -98,7 +97,6 @@ public class SearchActivity extends AppCompatActivity {
                         public void onResponse(Call<AnalysisResult> call, Response<AnalysisResult> response) {
                             if(response.isSuccessful()){
                                 filterList = response.body().getAnalyses();
-                                Log.d(filterList.get(0).getName(),filterList.get(0).getName());
                                 SearchAnalysisAdapter adapter = new SearchAnalysisAdapter(filterList,SearchActivity.this,text);
                                 search_result.setAdapter(adapter);
                                 adapter.notifyDataSetChanged();

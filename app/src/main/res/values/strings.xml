@@ -131,4 +131,14 @@
     <string name="add_patient_1">Добавить пациента</string>
 
     <string name="sum">Сумма</string>
+
+    <string name="pay">Оплата</string>
+    <string name="link_bank">Связываемся с банком....</string>
+    <string name="pay_action">Производим оплату...</string>
+
+    <string name="success_order">Ваш заказ успешно оплачен!</string>
+    <string name="goodbye">Вам осталось дождаться приезда медсестры и сдать анализы. До скорой встречи!</string>
+    <string name="rule">Не забудьте ознакомиться с правилами подготовки к сдаче анализов</string>
+    <string name="cheque">Чек покупки</string>
+    <string name="main">На главную</string>
 </resources>

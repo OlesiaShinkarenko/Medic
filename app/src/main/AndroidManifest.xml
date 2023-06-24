@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31" >
+        <activity android:name=".PayOrder.PayOrderActivity"
+            android:exported="false"/>
         <activity
             android:name=".OrderRegistration.OrderRegistrationActivity"
             android:exported="false" />

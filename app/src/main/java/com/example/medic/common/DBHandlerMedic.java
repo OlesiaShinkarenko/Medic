@@ -411,7 +411,11 @@ public class DBHandlerMedic extends SQLiteOpenHelper {
     }
 
 
-
+    public void ClearBasket(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME_BASKET,null,null);
+        db.close();
+    }
     public void updatePatient(CardPatient cardPatient){
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();

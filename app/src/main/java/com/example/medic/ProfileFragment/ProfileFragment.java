@@ -1,9 +1,13 @@
 package com.example.medic.ProfileFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +34,7 @@ import com.example.medic.common.DBHandlerMedic;
 import com.example.medic.common.ProfilesModelResponse;
 import com.example.medic.common.RetrofitClient;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,6 +49,7 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     private Context context;
     Spinner spinner_gender;
     ImageView profile_image;
+    Uri selectedImageUri;
     CardPatient cardPatient;
     Button btn_create_card;
     List<CardPatient> profiles;
@@ -207,6 +215,12 @@ public class ProfileFragment extends Fragment implements TextWatcher {
                 btn_create_card.setEnabled(false);
             }
         });
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageChooser();
+            }
+        });
             return view;
     }
 
@@ -225,6 +239,13 @@ public class ProfileFragment extends Fragment implements TextWatcher {
             btn_create_card.setEnabled(false);
         }else {
             btn_create_card.setEnabled(true);
+        } if(editText_first_name.getText().toString().length()==0 ||
+              editText_middle_name.getText().toString().length()==0
+                ||editText_lastname.getText().toString().length()==0
+                ||editText_date_birthday.getText().toString().length()==0){
+            btn_create_card.setEnabled(false);
+        }else {
+            btn_create_card.setEnabled(true);
         }
     }
 
@@ -232,4 +253,42 @@ public class ProfileFragment extends Fragment implements TextWatcher {
     public void afterTextChanged(Editable s) {
 
     }
+    ActivityResultLauncher<Intent> launchSomeActivity
+            = registerForActivityResult(
+            new ActivityResultContracts
+                    .StartActivityForResult(),
+            result -> {
+                if (result.getResultCode()
+                        == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null
+                            && data.getData() != null) {
+                        selectedImageUri = data.getData();
+                        Bitmap selectedImageBitmap = null;
+                        try {
+                            selectedImageBitmap
+                                    = MediaStore.Images.Media.getBitmap(
+                                    context.getContentResolver(),
+                                    selectedImageUri);
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        profile_image.setImageBitmap(
+                                selectedImageBitmap);
+                    }
+                }
+            });
+    private void imageChooser()
+    {
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+
+        launchSomeActivity.launch(i);
+    }
+
+
+
 }

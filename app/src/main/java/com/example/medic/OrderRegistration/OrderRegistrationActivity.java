@@ -1,6 +1,7 @@
 package com.example.medic.OrderRegistration;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +18,8 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.medic.CreateCard.CreateCardActivity;
+import com.example.medic.PayOrder.PayOrderActivity;
 import com.example.medic.R;
 import com.example.medic.common.Address;
 import com.example.medic.common.CardPatient;
@@ -27,16 +30,17 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderRegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class OrderRegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,TextWatcher {
 
    private ImageButton btn_back;
-    private EditText edit_text_address, edit_text_datetime,date;
+    Integer select;
+    private EditText edit_text_address, edit_text_datetime,date, edittext_number;
     private RecyclerView who_analysis;
     private BottomSheetDialog dialog;
 
     private DBHandlerMedic dbHandlerMedic;
     private Address address;
-   private Button add_patient;
+   private Button add_patient,registration;
    private ArrayList<CardPatient> patients;
     private List <String> timeList;
     @Override
@@ -49,6 +53,8 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
         edit_text_datetime = findViewById(R.id.edit_text_datetime);
         who_analysis = findViewById(R.id.who_analysis);
         add_patient = findViewById(R.id.add_patient);
+        edittext_number = findViewById(R.id.edittext_number);
+        registration = findViewById(R.id.registration);
 
         dbHandlerMedic = new DBHandlerMedic(this);
 
@@ -248,10 +254,20 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 });
             }
         });
-
-
-
-        /* add_patient.setOnClickListener(new View.OnClickListener() {
+        edit_text_address.addTextChangedListener(this);
+        edit_text_datetime.addTextChangedListener(this);
+        edittext_number.addTextChangedListener(this);
+        registration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(OrderRegistrationActivity.this, PayOrderActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+        PatientAdapter patientAdapter = new PatientAdapter(this);
+        who_analysis.setAdapter(patientAdapter);
+        add_patient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //вызываем диалог добавления пациента
@@ -260,8 +276,28 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 dialog.show();
                 Button button_add_patient = dialog.findViewById(R.id.button_add_patient);
                 RecyclerView recycle_view_patient = dialog.findViewById(R.id.recycle_view_patient);
+                List<CardPatient> patients1 =new ArrayList<>();
+                for(CardPatient cardPatient:patients){
+                    if(!dbHandlerMedic.PatientAlreadyInOrder(cardPatient.getId())){
+                        patients1.add(cardPatient);
+                    }
+                }
+                //добавляем ему адаптер
+                PatientCaseAdapter adapter = new PatientCaseAdapter(patients,OrderRegistrationActivity.this);
+                adapter.setOnItemsCheckStateListener(new PatientCaseAdapter.OnItemsCheckStateListener() {
+                    @Override
+                    public void onItemCheckStateChanged(int selectedPos) {
+                        //если ничего не выбрано, кнопка недоступна
+                        if(selectedPos!= RecyclerView.NO_POSITION){
+                            select = selectedPos;
+                            button_add_patient.setEnabled(true);
 
-
+                        }else{
+                            button_add_patient.setEnabled(false);
+                        }
+                    }
+                });
+                recycle_view_patient.setAdapter(adapter);
                 Button add_patient_patient_case = dialog.findViewById(R.id.add_patient_patient_case);
                 //добавляем переход к созданию карты, если выбрана кнопка "Добавить пациента"
                 add_patient_patient_case.setOnClickListener(new View.OnClickListener() {
@@ -275,13 +311,15 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
                 button_add_patient.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                       dialog.dismiss();
+                        patientAdapter.patients.add(patients1.get(select));
+                        adapter.notifyDataSetChanged();
+                        patientAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
                     }
                 });
             }
         });
 
-         */
     }
 
     @Override
@@ -292,5 +330,24 @@ public class OrderRegistrationActivity extends AppCompatActivity implements Date
         calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
         String selectedDate = DateFormat.getDateInstance(DateFormat.SHORT).format(calendar.getTime());
         date.setText(selectedDate);
+    }
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if(edit_text_address.getText().toString().length() == 0||edit_text_datetime.getText().toString().length()==0||
+                edittext_number.getText().toString().length()<11){
+            registration.setEnabled(false);
+        }else{
+            registration.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 }

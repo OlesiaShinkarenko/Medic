@@ -4,9 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.medic.R;
@@ -38,6 +39,7 @@ public class PatientAnalysisAdapter extends RecyclerView.Adapter<PatientAnalysis
         Analysis analysis = analyses.get(position);
         holder.name_analysis.setText(analysis.getName());
         holder.price_analysis.setText(analysis.getPriceFormat());
+
     }
 
     @Override
@@ -48,11 +50,27 @@ public class PatientAnalysisAdapter extends RecyclerView.Adapter<PatientAnalysis
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView name_analysis,price_analysis;
+        CheckBox check_box;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name_analysis = itemView.findViewById(R.id.name_analysis);
             price_analysis = itemView.findViewById(R.id.price_analysis);
+            check_box = itemView.findViewById(R.id.check_box);
+            int pos = getAdapterPosition();
+            check_box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (check_box.isChecked()){
+                        name_analysis.setTextColor(context.getColor(R.color.black));
+                        price_analysis.setTextColor(context.getColor(R.color.black));
+
+                    }else {
+                        name_analysis.setTextColor(context.getColor(R.color.AfternameOnBoard_color));
+                        price_analysis.setTextColor(context.getColor(R.color.AfternameOnBoard_color));
+                    } notifyItemChanged(pos);
+                }
+            });
         }
     }
 }
